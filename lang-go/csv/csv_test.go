@@ -28,6 +28,7 @@ var testdata = []struct {
 		},
 		Err: nil,
 	},
+
 	{
 		Name:   "first quoted",
 		Source: `"x"`,
@@ -39,6 +40,7 @@ var testdata = []struct {
 		},
 		Err: nil,
 	},
+
 	{
 		Name:   "second",
 		Source: "x,y",
@@ -55,6 +57,7 @@ var testdata = []struct {
 		},
 		Err: nil,
 	},
+
 	{
 		Name:   "second quoted",
 		Source: `"x","y"`,
@@ -71,6 +74,7 @@ var testdata = []struct {
 		},
 		Err: nil,
 	},
+
 	{
 		Name:   "third",
 		Source: ",,y",
@@ -88,6 +92,7 @@ var testdata = []struct {
 		},
 		Err: nil,
 	},
+
 	{
 		Name:   "third quoted",
 		Source: `,,"y"`,
@@ -105,6 +110,7 @@ var testdata = []struct {
 		},
 		Err: nil,
 	},
+
 	{
 		Name:   "fourth",
 		Source: "x,y\n",
@@ -122,6 +128,7 @@ var testdata = []struct {
 		},
 		Err: nil,
 	},
+
 	{
 		Name:   "fourth quoted",
 		Source: "\"x\",\"y\"\n",
@@ -139,6 +146,7 @@ var testdata = []struct {
 		},
 		Err: nil,
 	},
+
 	{
 		Name:   "fifth",
 		Source: "x,y\na,b\n",
@@ -164,6 +172,7 @@ var testdata = []struct {
 		},
 		Err: nil,
 	},
+
 	{
 		Name:   "fifth quoted",
 		Source: "\"x\",\"y\"\n\"a\",\"b\"\n",
@@ -189,6 +198,7 @@ var testdata = []struct {
 		},
 		Err: nil,
 	},
+
 	{
 		Name:   "sixth",
 		Source: "x,\na,b",
@@ -236,6 +246,7 @@ var testdata = []struct {
 		},
 		Err: nil,
 	},
+
 	{
 		Name:   "seventh",
 		Source: "x,y\na,",
@@ -259,6 +270,7 @@ var testdata = []struct {
 		},
 		Err: nil,
 	},
+
 	{
 		Name:   "seventh quoted",
 		Source: "\"x\",\"y\"\n\"a\",",
@@ -282,6 +294,7 @@ var testdata = []struct {
 		},
 		Err: nil,
 	},
+
 	{
 		Name:   "eight",
 		Source: "x,y\na,\n",
@@ -306,6 +319,7 @@ var testdata = []struct {
 		},
 		Err: nil,
 	},
+
 	{
 		Name:   "eight quoted",
 		Source: "\"x\",\"y\"\n\"a\",\n",
@@ -330,6 +344,7 @@ var testdata = []struct {
 		},
 		Err: nil,
 	},
+
 	{
 		Name:   "ninth",
 		Source: "x,\"y\"\na,b\n",
@@ -355,6 +370,7 @@ var testdata = []struct {
 		},
 		Err: nil,
 	},
+
 	{
 		Name:   "CRLF",
 		Source: "\r\n",
@@ -366,6 +382,7 @@ var testdata = []struct {
 		},
 		Err: nil,
 	},
+
 	{
 		Name:   "LF",
 		Source: "\n",

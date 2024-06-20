@@ -21,56 +21,67 @@ var tokenizerTestData = []struct {
 		Source: "xx",
 		Token:  token.Token{Kind: token.Identifier, Value: "xx"},
 	},
+
 	{
 		Name:   "value",
 		Source: "\"xx\"",
 		Token:  token.Token{Kind: token.Value, Value: "xx"},
 	},
+
 	{
 		Name:   "empty value",
 		Source: "\"\"",
 		Err:    tokenizer.ErrEmptyValue,
 	},
+
 	{
 		Name:   "dquote",
 		Source: "\"\"\"",
 		Token:  token.Token{Kind: token.DQuote, Value: "\""},
 	},
+
 	{
 		Name:   "reqex",
 		Source: "/x/",
 		Token:  token.Token{Kind: token.Regex, Value: "x"},
 	},
+
 	{
 		Name:   "unterminated regex",
 		Source: "/",
 		Err:    tokenizer.ErrUnterminatedRegex,
 	},
+
 	{
 		Name:   "unterminated regex",
 		Source: "/x",
 		Err:    tokenizer.ErrUnterminatedRegex,
 	},
+
 	{
 		Name:   "empty regex",
 		Source: "//",
 		Err:    tokenizer.ErrEmptyRegex,
 	},
+
 	{
 		Name:   "unterminated value 1",
 		Source: "\"",
 		Err:    tokenizer.ErrUnterminatedValue,
 	},
+
 	{
 		Name:   "unterminated value 2",
 		Source: "\"x",
 		Err:    tokenizer.ErrUnterminatedValue,
 	},
+
 	{
 		Name:   "keyword do",
 		Source: "do",
 		Token:  token.Token{Kind: token.Do, Value: "do"},
 	},
+
 	{
 		Name:   "keyword end",
 		Source: "end",

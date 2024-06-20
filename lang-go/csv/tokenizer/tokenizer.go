@@ -26,10 +26,10 @@ type Reader interface {
 	Read(b []byte) (int, error)
 }
 
-var notoken token.Token
+var NO_TOKEN token.Token
 
 var errMsg = map[Error]string{
-	EOF:                   "EOF",
+	EOF:                   "<EOF>",
 	ErrInvalidNewline:     "<Invalid newline>",
 	ErrRangeOutOfBound:    "<Range out of bound>",
 	ErrUnterminatedString: "<Unterminated string>",
@@ -61,13 +61,9 @@ func (t *Tokenizer) TokenizeAll() ([]token.Token, error) {
 	return fields, nil
 }
 
-func (t *Tokenizer) Lines() int {
-	return t.line
-}
-
 func (t *Tokenizer) Tokenize() (token.Token, error) {
 	if t.IsAtEnd() {
-		return notoken, EOF
+		return NO_TOKEN, EOF
 	}
 
 	b := t.advance()
@@ -141,6 +137,7 @@ func (t *Tokenizer) escapedValue() (token.Token, error) {
 		return token.Token{}, ErrUnterminatedString
 	}
 
+	isClosed := false
 loop:
 	for !t.IsAtEnd() {
 		b := t.advance()
@@ -152,13 +149,14 @@ loop:
 				value += string(b)
 				continue
 			}
+			isClosed = true
 			break loop
 		default:
 			value += string(b)
 		}
 	}
 
-	if prev := t.source[t.current-1]; t.IsAtEnd() && prev != '"' {
+	if t.IsAtEnd() && !isClosed {
 		return token.Token{}, ErrUnterminatedString
 	}
 
