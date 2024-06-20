@@ -1,0 +1,15 @@
+grammar = rules .
+rules = rule rules
+rules = rule .
+rule = NAME "=" alternatives .
+alternatives = alternative "|" alternatives .
+alternatives = alternative .
+alternative = terms .
+terms = term terms .
+terms = term.
+term = NAME .
+term = STRING .
+term = group .
+group = "(" alternatives ")" .
+group = "{" alternatives "}" .
+group = "[" alternatives "]" .
