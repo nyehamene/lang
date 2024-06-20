@@ -1,0 +1,26 @@
+Rule do Identifier "do" Alternatives "end" end
+Alternatives do Alternative Alternatives end
+Alternatives do Alternative end
+Alternative do Identifier end
+Alternative do DQuote EscapeChar DQuote end
+Alternative do Regex end
+Alternative do Value end
+Identifier do Letter Alphanumerics end
+Letter do  Underscore end
+Letter do  UpperCaseLetter end
+Letter do  LowerCaseLetter end
+Underscore do "_" end
+UpperCaseLetter do /[A-Z]/ end
+LowerCaseLetter do /[a-z]/ end
+Alphanumerics do Alphanumberic Alphanumerics end
+Alphanumerics do Alphanumberic end
+Alphanumeric do Alphabet end
+Alphanumeric do Number end
+Alphabet do Letter Alphabet end
+Alphabet do Letter end
+Number do Digit Number end
+Number do Digit end
+Digit do /[0-9]/ end
+DQuote do "\"" end
+EscapeChar do DQuote end
+Regex do "/" /[^/]/ "/" end
