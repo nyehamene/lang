@@ -1,0 +1,183 @@
+============================
+let
+============================
+
+let x x.x;
+
+----------------------------
+
+(program
+    (let
+        name: (identifier)
+        type: (namespaced_type
+                namespace: (identifier)
+                type: (identifier))))
+
+================================
+function parameter
+================================
+
+fun x (x x.x) do end
+
+--------------------------------
+
+(program
+    (function
+        name: (identifier)
+        (parameters
+          (parameter
+            name: (identifier)
+            type: (namespaced_type
+                    namespace: (identifier)
+                    type: (identifier))))
+        body: (block)))
+
+================================
+function return
+================================
+
+fun x () x.x do end
+
+--------------------------------
+
+(program
+  (function
+    name: (identifier)
+    (parameters)
+    return: (namespaced_type
+              namespace: (identifier)
+              type: (identifier))
+    body: (block)))
+
+================================
+let_in
+================================
+
+x(let x x.x = 5 in end);
+
+--------------------------------
+
+(program
+    (call
+      fun: (identifier)
+      (arguments
+        (argument
+          (let_in (bindings
+                    (binding
+                      name: (identifier)
+                      type: (namespaced_type
+                              namespace: (identifier)
+                              type: (identifier))
+                      value: (integer_literal))))))))
+
+
+==============================
+record
+==============================
+
+record x do
+    x x.x;
+end
+
+------------------------------
+
+(program
+  (record
+    name: (identifier)
+    body: (block
+            (component
+                name: (identifier)
+                type: (namespaced_type
+                        namespace: (identifier)
+                        type: (identifier))))))
+
+=============================
+enum
+=============================
+
+enum x do
+    record x do
+        x x.x = "";
+    end
+end
+
+----------------------------
+
+(program
+  (enum
+    name: (identifier)
+    body: (block
+            (record
+              name: (identifier)
+              (block
+                      (component
+                        name: (identifier)
+                        type: (namespaced_type
+                                namespace: (identifier)
+                                type: (identifier))
+                        value: (string_literal)))))))
+
+==================
+fn type (1)
+==================
+
+let x fn();
+
+------------------
+
+(program
+    (let
+        name: (identifier)
+        type: (function (parameters))))
+
+==================
+fn type (2)
+==================
+
+let x fn(x);
+
+------------------
+
+(program
+    (let
+        name: (identifier)
+        type: (function (parameters
+            (parameter
+              type: (identifier))))))
+
+==================
+fn type (3)
+==================
+
+let x fn(x, x, x);
+
+------------------
+
+(program
+    (let
+        name: (identifier)
+        type: (function (parameters
+            (parameter
+              type: (identifier))
+            (parameter
+              type: (identifier))
+            (parameter
+              type: (identifier))))))
+
+==================
+fn type (4)
+==================
+
+let x fn(x) x;
+
+------------------
+
+(program
+    (let
+        name: (identifier)
+        type: (function
+                (parameters
+                    (parameter
+                      type: (identifier)))
+                return: (identifier))))
+

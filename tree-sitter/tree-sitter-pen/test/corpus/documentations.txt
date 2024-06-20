@@ -1,0 +1,88 @@
+
+
+=======================
+prefix documentation
+=======================
+
+--* prefix
+fun name = void do end
+
+--* prefix
+example name do end
+
+--* prefix
+test name do end
+
+------------------------
+
+(program
+    (function_declaration
+        (prefix_documentation)
+        (function (identifier) (void_type)))
+    (example_declaration
+        (prefix_documentation)
+        (example (identifier)))
+    (test_declaration
+        (prefix_documentation)
+        (test (identifier)))
+)
+
+=======================
+postfix documentation
+=======================
+
+fun name = void do end
+--+ postfix
+
+example name do end
+--+ postfix
+
+test name do end
+--+ postfix
+
+------------------------
+
+(program
+    (function_declaration
+        (function (identifier) (void_type))
+        (postfix_documentation))
+    (example_declaration
+        (example (identifier))
+        (postfix_documentation))
+    (test_declaration
+        (test (identifier))
+        (postfix_documentation))
+)
+
+=======================
+both documentation
+=======================
+
+--* prefix
+fun name = void do end
+--+ postfix
+
+--* prefix
+example name do end
+--+ postfix
+
+--* prefix
+test name do end
+--+ postfix
+
+------------------------
+
+(program
+    (function_declaration
+        (prefix_documentation)
+        (function (identifier) (void_type))
+        (postfix_documentation))
+    (example_declaration
+        (prefix_documentation)
+        (example (identifier))
+        (postfix_documentation))
+    (test_declaration
+        (prefix_documentation)
+        (test (identifier))
+        (postfix_documentation))
+)

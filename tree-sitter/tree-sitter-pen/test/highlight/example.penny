@@ -1,0 +1,6 @@
+example greet String "description" do
+--- <- keyword.function
+---     ^ function
+---             ^ type name.type
+---                   ^ string.quoted.double
+end

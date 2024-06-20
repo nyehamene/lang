@@ -1,0 +1,8 @@
+fun function_a = void do
+--- <- keyword.function
+---        ^ function
+---                ^ type.builtin
+---                    ^ keyword
+end
+---  <- keyword
+
