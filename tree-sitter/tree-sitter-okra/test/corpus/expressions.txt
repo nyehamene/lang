@@ -1,0 +1,292 @@
+===============
+string
+===============
+
+""
+"x"
+"0"
+
+---------------
+
+(program
+    (string_literal)
+    (string_literal)
+    (string_literal))
+
+================
+integer
+================
+
+0
+10
+
+----------------
+
+(program
+    (integer_literal)
+    (integer_literal))
+
+=================
+nil
+=================
+
+nil
+
+------------------
+
+(program
+    (nil_literal))
+
+==================
+true
+==================
+
+true
+
+------------------
+
+(program
+    (true_literal))
+
+==================
+false
+==================
+
+false
+
+------------------
+
+(program
+    (false_literal))
+
+==================
+void return
+==================
+
+fun x() void do end
+
+-------------------
+
+(program
+    (function
+        name: (identifier)
+        (parameters)
+        return: (void)
+        body: (block)))
+
+==================
+this
+==================
+
+this
+
+------------------
+
+(program
+    (this_literal))
+
+==================
+let_in (1)
+==================
+
+let x x = let x = x, x = true in end;
+
+------------------
+
+(program
+    (let
+        name: (identifier)
+        type: (identifier)
+        value: (let_in (bindings
+                (binding
+                    name: (identifier)
+                    value: (identifier))
+                (binding
+                  name: (identifier)
+                  value: (true_literal))))))
+
+==================
+let_in (2)
+==================
+
+let x x = let x = x, x = true in
+    x();
+end;
+
+------------------
+
+(program
+    (let
+        name: (identifier)
+        type: (identifier)
+        value: (let_in (bindings
+                (binding
+                    name: (identifier)
+                    value: (identifier))
+                (binding
+                  name: (identifier)
+                  value: (true_literal)))
+                body: (block
+                        (call
+                          fun: (identifier)
+                          (arguments))))))
+
+===================
+call (1)
+===================
+
+let x = x();
+
+-------------------
+
+(program
+    (let
+        name: (identifier)
+        value: (call
+            fun: (identifier)
+            (arguments))))
+
+===================
+call (2)
+===================
+
+let x = x(x);
+
+-------------------
+
+(program
+    (let
+        name: (identifier)
+        value: (call
+            fun: (identifier)
+            (arguments
+                (argument
+                    (identifier))))))
+
+===================
+call (3)
+===================
+
+let x = x(x, x, x);
+
+-------------------
+
+(program
+    (let
+        name: (identifier)
+        value: (call
+            fun: (identifier)
+            (arguments
+                (argument
+                    (identifier))
+                (argument
+                    (identifier))
+                (argument
+                    (identifier))))))
+
+===================
+member field (1)
+===================
+
+let x = a.x;
+
+-------------------
+
+(program
+    (let
+        name: (identifier)
+        value: (member
+            object: (identifier)
+            field: (identifier))))
+
+===================
+member field (2)
+===================
+
+let x = a.x.x.x;
+
+-------------------
+
+(program
+    (let
+        name: (identifier)
+        value: (member
+            object: (member
+                object: (member
+                    object: (identifier)
+                    field: (identifier))
+                field: (identifier))
+            field: (identifier))))
+
+
+===================
+call method (1)
+===================
+
+let x = a.x();
+
+-------------------
+
+(program
+    (let
+        name: (identifier)
+        value: (member
+            object: (identifier)
+            method: (call
+                fun: (identifier)
+                (arguments)))))
+
+
+===================
+call method (2)
+===================
+
+let x = a.x().x();
+
+-------------------
+
+(program
+    (let
+        name: (identifier)
+        value: (member
+            object: (member
+                object: (identifier)
+                method: (call
+                    fun: (identifier)
+                    (arguments)))
+            method: (call
+                fun: (identifier)
+                (arguments)))))
+
+
+===================
+call method (3)
+===================
+
+let x = x.x.x().x.x();
+
+-------------------
+
+(program
+    (let
+        name: (identifier)
+        value: (member
+                 object: (member
+                           object: (member
+                                     object: (member
+                                               object: (identifier)
+                                               field: (identifier))
+                                     method: (call
+                                               fun: (identifier)
+                                               (arguments)))
+                           field: (identifier))
+                 method: (call
+                            fun:  (identifier)
+                            (arguments)))))
+
+
+
+
+
+
+

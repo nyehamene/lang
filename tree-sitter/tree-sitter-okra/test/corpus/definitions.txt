@@ -1,0 +1,769 @@
+=======================
+function (1)
+=======================
+
+fun x() do end
+
+-----------------------
+
+(program
+    (function
+        name: (identifier)
+        (parameters)
+        body: (block)))
+
+=======================
+function (2)
+=======================
+
+fun x() x do end
+
+-----------------------
+
+(program
+    (function
+        name: (identifier)
+        (parameters)
+        return: (identifier)
+        body: (block)))
+
+=======================
+function (3)
+=======================
+
+fun x(x) x do end
+
+-----------------------
+
+(program
+    (function
+        name: (identifier)
+        (parameters
+            (parameter
+                name: (identifier)))
+        return: (identifier)
+        body: (block)))
+
+=======================
+function (4)
+=======================
+
+fun x(x, x) x do end
+
+-----------------------
+
+(program
+    (function
+        name: (identifier)
+        (parameters
+            (parameter
+                name: (identifier))
+            (parameter
+                name: (identifier)))
+        return: (identifier)
+        body: (block)))
+
+=======================
+function (5)
+=======================
+
+fun x(x x) x do end
+
+-----------------------
+
+(program
+    (function
+        name: (identifier)
+        (parameters
+            (parameter
+                name: (identifier)
+                type: (identifier)) )
+        return: (identifier)
+        body: (block)))
+
+=======================
+function (6)
+=======================
+
+fun x(x x, x x) x do end
+
+-----------------------
+
+(program
+    (function
+        name: (identifier)
+        (parameters
+            (parameter
+                name: (identifier)
+                type: (identifier))
+            (parameter
+                name: (identifier)
+                type: (identifier)) )
+        return: (identifier)
+        body: (block)))
+
+=======================
+function (7)
+=======================
+
+fun x(x x, x x) do end
+
+-----------------------
+
+(program
+    (function
+        name: (identifier)
+        (parameters
+            (parameter
+                name: (identifier)
+                type: (identifier))
+            (parameter
+                name: (identifier)
+                type: (identifier)) )
+        body: (block)))
+
+=========================
+test (1)
+=========================
+
+test "m" end
+
+-------------------------
+
+(program
+    (test
+        desc: (description)))
+
+=========================
+test (2)
+=========================
+
+test "m" do end
+
+-------------------------
+
+(program
+    (test
+        desc: (description)
+        body: (block)))
+
+=========================
+test (3)
+=========================
+
+test x "m" do end
+
+-------------------------
+
+(program
+    (test
+        target: (identifier)
+        desc: (description)
+        body: (block)))
+
+=========================
+test (4)
+=========================
+
+test x() "m" do end
+
+-------------------------
+
+(program
+    (test
+        target: (function
+            name: (identifier)
+            (parameters))
+        desc: (description)
+        body: (block)))
+
+=========================
+test (5)
+=========================
+
+test x(x) "m" do end
+
+-------------------------
+
+(program
+    (test
+        target: (function
+            name: (identifier)
+            (parameters
+              (parameter
+                type: (identifier))))
+        desc: (description)
+        body: (block)))
+
+=========================
+test (5)
+=========================
+test x(x, x) "m" do end
+
+-------------------------
+
+(program
+    (test
+        target: (function
+            name: (identifier)
+            (parameters
+              (parameter
+                type: (identifier))
+              (parameter
+                type: (identifier))))
+        desc: (description)
+        body: (block)))
+
+=========================
+test (6)
+=========================
+
+test x do end
+
+-------------------------
+
+(program
+    (test
+        target: (identifier)
+        body: (block)))
+
+=========================
+test (7)
+=========================
+
+test x() do end
+
+-------------------------
+
+(program
+    (test
+        target: (function
+            name: (identifier)
+            (parameters))
+        body: (block)))
+
+=========================
+test (8)
+=========================
+
+test x(x) do end
+
+-------------------------
+
+(program
+    (test
+        target: (function
+            name: (identifier)
+            (parameters
+              (parameter
+                type: (identifier))))
+        body: (block)))
+
+=========================
+test (9)
+=========================
+
+test x(x, x) do end
+
+-------------------------
+
+(program
+    (test
+        target: (function
+            name: (identifier)
+            (parameters
+              (parameter
+                type: (identifier))
+              (parameter
+                type: (identifier))))
+        body: (block)))
+
+=========================
+test (10)
+=========================
+
+test x() x do end
+
+-------------------------
+
+(program
+    (test
+        target: (function
+            name: (identifier)
+            (parameters)
+            return: (identifier))
+        body: (block)))
+
+========================
+record (1)
+========================
+
+record x end
+
+------------------------
+
+(program
+    (record
+        name: (identifier)))
+
+========================
+record (2)
+========================
+
+record x do end
+
+------------------------
+
+(program
+    (record
+        name: (identifier)
+        body: (block)))
+
+========================
+record (3)
+========================
+
+record x do
+    a b;
+end
+
+------------------------
+
+(program
+    (record
+        name: (identifier)
+        body: (block
+                (component
+                    name: (identifier)
+                    type: (identifier)))))
+
+========================
+record (4)
+========================
+
+record x do
+    a b;
+    a b;
+end
+
+------------------------
+
+(program
+    (record
+        name: (identifier)
+        body: (block
+                (component
+                    name: (identifier)
+                    type: (identifier))
+                (component
+                    name: (identifier)
+                    type: (identifier)))))
+
+========================
+enum (1)
+========================
+
+enum x do end
+
+-------------------------
+
+(program
+    (enum
+        name: (identifier)
+        body: (block)))
+
+
+========================
+enum (2)
+========================
+
+enum x do
+    record x end
+end
+
+-------------------------
+
+(program
+    (enum
+        name: (identifier)
+        body: (block
+                (record
+                    name: (identifier)))))
+
+========================
+enum (3)
+========================
+
+enum x do
+    record x do end
+end
+
+-------------------------
+
+(program
+    (enum
+        name: (identifier)
+        body: (block
+                (record
+                    name: (identifier)
+                    (block)))))
+
+========================
+enum (4)
+========================
+
+enum x do
+    record x do
+        x x = "";
+    end
+end
+
+-------------------------
+
+(program
+    (enum
+        name: (identifier)
+        body: (block
+            (record
+                name: (identifier)
+                (block
+                    (component
+                        name: (identifier)
+                        type: (identifier)
+                        value: (string_literal)))))))
+
+========================
+enum (5)
+========================
+
+enum x do
+    record x do
+        x x = "";
+        x x = "";
+    end
+end
+
+-------------------------
+
+(program
+    (enum
+        name: (identifier)
+        body: (block
+            (record
+                name: (identifier)
+                (block
+                    (component
+                        name: (identifier)
+                        type: (identifier)
+                        value: (string_literal))
+                    (component
+                        name: (identifier)
+                        type: (identifier)
+                        value: (string_literal)))))))
+
+========================
+enum (6)
+========================
+
+enum x do
+    record x do
+        x = "";
+    end
+end
+
+-------------------------
+
+(program
+    (enum
+        name: (identifier)
+        body: (block
+            (record
+                name: (identifier)
+                (block
+                    (component
+                        name: (identifier)
+                        value: (string_literal)))))))
+=========================
+interface (1)
+=========================
+
+interface x end
+
+-------------------------
+
+(program
+    (interface
+        name: (identifier)))
+
+
+=========================
+interface (2)
+=========================
+
+interface x do end
+
+-------------------------
+
+(program
+    (interface
+        name: (identifier)
+        body: (block)))
+
+
+=========================
+interface (3)
+=========================
+
+interface x do
+    fun x() end
+end
+
+-------------------------
+
+(program
+    (interface
+        name: (identifier)
+        body: (block
+            (function
+                name: (identifier)
+                (parameters)))))
+
+=========================
+interface (4)
+=========================
+
+interface x do
+    fun x() x end
+end
+
+-------------------------
+
+(program
+    (interface
+        name: (identifier)
+        body: (block
+            (function
+                name: (identifier)
+                (parameters)
+                return: (identifier)))))
+
+=========================
+interface (5)
+=========================
+
+interface x do
+    fun x(x) x end
+end
+
+-------------------------
+
+(program
+    (interface
+        name: (identifier)
+        body: (block
+            (function
+                name: (identifier)
+                (parameters
+                    (parameter
+                        type: (identifier)))
+                return: (identifier)))))
+
+=========================
+interface (6)
+=========================
+
+interface x do
+    fun x(x, x) x end
+end
+
+-------------------------
+
+(program
+    (interface
+        name: (identifier)
+        body: (block
+            (function
+                name: (identifier)
+                (parameters
+                    (parameter
+                        type: (identifier))
+                    (parameter
+                        type: (identifier)))
+                return: (identifier)))))
+
+=========================
+interface (7)
+=========================
+
+interface x do
+    fun x(x x) x end
+end
+
+-------------------------
+
+(program
+    (interface
+        name: (identifier)
+        body: (block
+            (function
+                name: (identifier)
+                (parameters
+                    (parameter
+                        name: (identifier)
+                        type: (identifier)))
+                return: (identifier)))))
+
+=========================
+interface (8)
+=========================
+
+interface x do
+    fun x(x x, x x) x end
+end
+
+-------------------------
+
+(program
+    (interface
+        name: (identifier)
+        body: (block
+            (function
+                name: (identifier)
+                (parameters
+                    (parameter
+                        name: (identifier)
+                        type: (identifier))
+                    (parameter
+                        name: (identifier)
+                        type: (identifier)))
+                return: (identifier)))))
+
+======================
+case interface (1)
+======================
+
+interface x case
+    fun x() end
+end
+
+----------------------
+
+(program
+    (interface
+        name: (identifier)
+        body: (block
+            (case_function
+                name: (identifier)
+                (parameters)))))
+
+======================
+case interface (2)
+======================
+
+interface x case
+    fun x() x end
+end
+
+----------------------
+
+(program
+    (interface
+        name: (identifier)
+        body: (block
+            (case_function
+                name: (identifier)
+                (parameters)
+                return: (identifier)))))
+
+======================
+case interface (3)
+======================
+
+interface x case
+    fun x(x) x end
+end
+
+----------------------
+
+(program
+    (interface
+        name: (identifier)
+        body: (block
+            (case_function
+                name: (identifier)
+                (parameters
+                    (parameter
+                        type: (identifier)))
+                return: (identifier)))))
+
+======================
+case interface (4)
+======================
+
+interface x case
+    fun x(x, x) x end
+end
+
+----------------------
+
+(program
+    (interface
+        name: (identifier)
+        body: (block
+            (case_function
+                name: (identifier)
+                (parameters
+                    (parameter
+                        type: (identifier))
+                    (parameter
+                        type: (identifier)))
+                return: (identifier)))))
+
+======================
+case interface (5)
+======================
+
+interface x case
+    fun x(x x) x end
+end
+
+----------------------
+
+(program
+    (interface
+        name: (identifier)
+        body: (block
+            (case_function
+                name: (identifier)
+                (parameters
+                    (parameter
+                        name: (identifier)
+                        type: (identifier)))
+                return: (identifier)))))
+
+======================
+case interface (6)
+======================
+
+interface x case
+    fun x(x x, x x) x end
+end
+
+----------------------
+
+(program
+    (interface
+        name: (identifier)
+        body: (block
+            (case_function
+                name: (identifier)
+                (parameters
+                    (parameter
+                        name: (identifier)
+                        type: (identifier))
+                    (parameter
+                        name: (identifier)
+                        type: (identifier)))
+                return: (identifier)))))
+
+

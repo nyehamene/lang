@@ -1,0 +1,90 @@
+=====================
+declarations
+=====================
+
+example "check example" do end
+example Func "check example" do end
+example Func Int "check example" do end
+example Func Int Int "check example" do end
+
+example Func Int Int do end
+example Foo Int do end
+example Foo do end
+
+fun no_argument = void do end
+fun one_argument x = Int do end
+fun arguments x y = void do end
+
+test "check test" do end
+test Func "check test" do end
+test Func Int "check test" do end
+test Func Int Int "check test" do end
+
+test Func Int Int do end
+test Func Int do end
+test Func do end
+
+---------------------
+
+(program
+    (example_declaration (example
+         desc: (string_literal)))
+    (example_declaration (example
+        function: (identifier)
+        desc: (string_literal)))
+    (example_declaration (example
+        function: (identifier)
+        parameter_type: (identifier)
+        desc: (string_literal)))
+    (example_declaration (example
+        function: (identifier)
+        parameter_type: (identifier)
+        parameter_type: (identifier)
+        desc: (string_literal)))
+    (example_declaration (example
+        function: (identifier)
+        parameter_type: (identifier)
+        parameter_type: (identifier)))
+    (example_declaration (example
+        function: (identifier)
+        parameter_type: (identifier)))
+    (example_declaration (example
+        function: (identifier)))
+
+    (function_declaration (function
+        name: (identifier)
+        return: (void_type)))
+    (function_declaration (function
+        name: (identifier)
+        parameter: (identifier)
+        return: (identifier)))
+    (function_declaration (function
+        name: (identifier)
+        parameter: (identifier)
+        parameter: (identifier)
+        return: (void_type)))
+
+    (test_declaration (test
+         desc: (string_literal)))
+    (test_declaration (test
+        function: (identifier)
+        desc: (string_literal)))
+    (test_declaration (test
+        function: (identifier)
+        parameter_type: (identifier)
+        desc: (string_literal)))
+    (test_declaration (test
+        function: (identifier)
+        parameter_type: (identifier)
+        parameter_type: (identifier)
+        desc: (string_literal)))
+    (test_declaration (test
+        function: (identifier)
+        parameter_type: (identifier)
+        parameter_type: (identifier)))
+    (test_declaration (test
+        function: (identifier)
+        parameter_type: (identifier)))
+    (test_declaration (test
+        function: (identifier)))
+)

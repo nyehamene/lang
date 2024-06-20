@@ -1,0 +1,17 @@
+=========================
+statements
+=========================
+
+example "test all types of statement" do
+    let name = "value";
+    return x;
+end
+
+--------------------------
+
+(program (example_declaration (example desc: (string_literal) body: (block
+    (let_statement
+        name: (identifier)
+        value: (string_literal))
+    (return_statement (identifier))
+))))
