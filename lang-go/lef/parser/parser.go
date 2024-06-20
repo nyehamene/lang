@@ -1,8 +1,6 @@
 package parser
 
 import (
-	"errors"
-
 	"github.com/nyehamene/lang/lef/token"
 	"github.com/nyehamene/lang/lef/tokenizer"
 )
@@ -31,7 +29,7 @@ var parserErrMsg = map[Error]string{
 	ErrExpectedIdentifier: "expected identifier",
 }
 
-var norule = Rule{}
+var NO_RULE = Rule{}
 
 func New(t tokenizer.Tokenizer) *Parser {
 	return &Parser{
@@ -53,30 +51,30 @@ func (p *Parser) rule() (_ Rule, err error) {
 	}()
 
 	if !p.peek(token.Identifier) {
-		return norule, ErrExpectedIdentifier
+		return NO_RULE, ErrExpectedIdentifier
 	}
 
 	name, err := p.advance()
 
 	if err != nil {
-		return norule, err
+		return NO_RULE, err
 	}
 
 	if !p.expect(token.Do) {
-		return norule, ErrExpectedKeywordDo
+		return NO_RULE, ErrExpectedKeywordDo
 	}
 
 	var value []token.Token
 	for !p.peek(token.End) && !p.isAtEnd() {
 		token, err := p.advance()
 		if err != nil {
-			return norule, err
+			return NO_RULE, err
 		}
 		value = append(value, token)
 	}
 
 	if !p.expect(token.End) {
-		return norule, ErrExpectedKeywordEnd
+		return NO_RULE, ErrExpectedKeywordEnd
 	}
 
 	return Rule{Name: name.Value, Value: value}, nil
@@ -129,8 +127,4 @@ func (pe Error) Error() string {
 		return "unexpected parser error"
 	}
 	return msg
-}
-
-func (p *Parser) error(msg string) error {
-	return errors.New(msg)
 }

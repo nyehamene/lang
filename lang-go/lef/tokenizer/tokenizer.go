@@ -31,7 +31,7 @@ var tokenErrMsg = map[Error]string{
 	ErrEmptyValue:        "Empty value",
 }
 
-var notoken token.Token
+var NO_TOKEN token.Token
 
 func New(s string) *Tokenizer {
 	return &Tokenizer{
@@ -61,7 +61,7 @@ func (t *Tokenizer) Tokenize() (_ token.Token, err error) {
 	}()
 
 	if t.IsAtEnd() {
-		return notoken, EOF
+		return NO_TOKEN, EOF
 	}
 
 	for t.peek(' ') {
@@ -73,11 +73,9 @@ func (t *Tokenizer) Tokenize() (_ token.Token, err error) {
 	switch current := t.advance(); current {
 	case '/':
 		regex, err := t.regex()
-
 		if err != nil {
-			return notoken, err
+			return NO_TOKEN, err
 		}
-
 		token = regex
 	case '"':
 		if escape, err := t.doubleQuote(); err {
@@ -86,11 +84,9 @@ func (t *Tokenizer) Tokenize() (_ token.Token, err error) {
 		}
 
 		quoted, err := t.value()
-
 		if err != nil {
-			return notoken, err
+			return NO_TOKEN, err
 		}
-
 		token = quoted
 	default:
 		token = t.identifier(current)
@@ -116,11 +112,10 @@ func (t *Tokenizer) regex() (_ token.Token, err error) {
 	}
 
 	if !t.match('/') {
-		return notoken, ErrUnterminatedRegex
+		return NO_TOKEN, ErrUnterminatedRegex
 	}
-
 	if regex == "" {
-		return notoken, ErrEmptyRegex
+		return NO_TOKEN, ErrEmptyRegex
 	}
 
 	return token.Token{Value: regex, Kind: token.Regex}, nil
@@ -136,11 +131,11 @@ func (t *Tokenizer) doubleQuote() (_ token.Token, ok bool) {
 	}()
 
 	if !t.match('"') {
-		return notoken, false
+		return NO_TOKEN, false
 	}
 
 	if !t.match('"') {
-		return notoken, false
+		return NO_TOKEN, false
 	}
 
 	token := token.Token{Value: "\"", Kind: token.DQuote}
@@ -164,11 +159,11 @@ func (t *Tokenizer) value() (_ token.Token, err error) {
 	}
 
 	if !t.match('"') {
-		return notoken, ErrUnterminatedValue
+		return NO_TOKEN, ErrUnterminatedValue
 	}
 
 	if quoted == "" {
-		return notoken, ErrEmptyValue
+		return NO_TOKEN, ErrEmptyValue
 	}
 
 	return token.Token{Value: quoted, Kind: token.Value}, nil
