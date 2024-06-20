@@ -1,0 +1,282 @@
+--- # Penny Language Reference
+---
+--- ## Function
+---
+--- ### Function Definitions
+---
+--- A function definition has the following forms:
+---
+--- 1. `fun <name> do <block> end`
+--- 2. `fun <name> <parameter-list> do <block> end`
+--- 3. `fun <name> <parameter-list> = <return-type> do <block> end`
+--- 4. `fun <name> = <return-type> do <block> end`
+---
+--- The `fun` keyword starts a function definition followed by
+--- the function name.
+--- Then a space separated list of zero, one, or more
+--- function parameter names.
+--- The function return type is separated from the function name
+--- or parameter list by an `=` symbol.
+--- The function body is included between `do` and `end` keywords.
+
+--* 1. __A function that takes no argument__
+
+fun greet = void do
+    std.println "Hello, World!";
+end
+
+--* 2. __A function that takes two argument__
+
+fun say greeting name = void do
+    std.println "\{greeting}, \{name}!";
+end
+
+--* 3. __A function that takes some parameters
+--*    and has an explicity return type__
+
+fun getGreeting lang = String do
+    "english".eqauls lang.toLowerCase do
+        return "Hello";
+    end
+
+    "spanish".eqauls lang.toLowerCase do
+        return "Hola";
+    end
+
+    return "Hi";
+end
+
+--* 4. __A function that has implicit return type__
+
+fun getName = String do
+    return "World";
+end
+
+--- ### Function Invocation
+---
+--- A function invocation has the following forms:
+---
+--- 1. `<name>`
+--- 2. `<name> <argument-list>`
+---
+--- A function invocation starts with the name of the function
+--- and an optional list of arguments separated by whitespace.
+
+--* __Invoke a function that takes no arguments__
+
+example greet "invoke a function that takes no arguments" do
+    greet;
+end
+
+--* __Invoke a function that takes one or more arguments__
+
+example "function invocation with arguments" do
+    let greeting = getGreeting "english";
+    let name = getName;
+    say greeting name;
+    say "Hello" "World";
+end
+
+test "function return value" do
+    let greeting = getGreeting "english";
+    try std.testing.expect greeting.equals "Hello";
+
+    let name = getName;
+    try std.testing.expect name.equals "World";
+end
+
+--- ### Function Parameter Type Annotation
+---
+--- A function parameter type annotation is defined as follows:
+---
+--- 1. `fun <name> ;`
+--- 2. `fun <name> <parameter-type-list> ;`
+--- 3. `fun <name> <parameter-type-list> = <return-type> ;`
+---
+--- A function parameter type annotation starts with `fun`
+--- keyword followed by the name of the function and a list
+--- of zero, one or more parameter types separated by space,
+--- followed by zero or one return type separated from the
+--- function name and/or parameter types by an `=` symbol.
+---
+--- The parameter type definition of a function is define
+--- separately on the line immediately before the function
+--- defition.
+---
+--- ===================================
+--- ========== CONTINUE HERE ==========
+--- ===================================
+
+--* __Define type annotations for function parameters and return type__
+
+fun say String String = String;
+fun say greeting name = String do
+  return "\{greeting}, \{name}";
+end
+
+--* The return type can be omitted from the fun definition
+--* if the function has a type annotation. For example,
+--* the function `say` maybe defined as follows:
+
+fn: say String String = String;
+fun say greeting name = String do
+  return "\{greeting}, \{name}";
+end
+
+--* __Define a split-function__
+--*
+--* A split-function name divided into multiple components,
+--* separated by comma (`,`) and each component of the function
+--* name takes one or more parameters.
+
+fun say greeting, to name = String do
+   let message = std.str "\{greeting}, \{name}";
+   std.println message;
+end
+
+--* The above function name has 2 components `say` and `to`
+--* and returns a `String`.
+--* The name component `say` has one parameter `greeting`, and
+--* the name component `to` has one parameter `name`.
+--*
+--* To invoke a split-function, separate each name component and
+--* its arguments from other name components by a comma (`,`).
+
+test say String, to String do
+    --* split-function invocation
+    let msg = say "Hello", to "John";
+    try std.testing.expect msg.equals "Hello, John";
+end
+
+--* __Declare type annotations for split-function parameters and return type__
+
+fun: say String, to String = String;
+fun say greeting, to name = String do
+   let message = std.str "\{greeting}, \{name}";
+   return message;
+end
+
+--* __Declare a function that take a function as argument__
+
+fun greetingByLang lang = String do
+    lang.equals "english" do return "Hello" end
+    lang.equals "spanish" do return "Hola" end
+    return ";)";
+end
+
+fun: greet String, in String, using fn String = String = String
+fun greet name, in lang, using langGreeting = String do
+    let greeting = langGreeting lang;
+    let message = std.str "\{greeting}, \{name}";
+    return message;
+end
+
+test greet String in String using String do
+    let msg = greet "John", in "english", using fn greetingByLang;
+    try std.testing.expect msg.equals "Hello, John";
+end
+
+--* ### Record
+--*
+--* __Declare a record__
+
+record Rectange end
+
+--* __Declare record components__
+
+record Rectange do
+  width Float;
+  height Float
+end
+
+example Rectange do
+    --* Create a record value
+    let rectange = Rectangle { width: 5; height: 5 };
+    --* Access a record component
+    let width = rectangle.width;
+    std.println width;
+end
+
+--* ### Interface
+--*
+--* __Declare an interface__
+
+interface Shape end
+
+--* __Declare an abstract method in an interface__
+
+interface Shape do
+    fun area = Float end
+end
+
+--* __Provide default implementation for abstract methods__
+
+interface Shape do
+    impl fun area = Float do
+        return 0;
+    end
+end
+
+--* ### Sealed Interface
+--*
+--* __Sealed interface declaration__
+
+interface Shape
+    where record Rectange width Float; height Float
+    where record Circle radius Float
+end
+
+--* The sealed interface `Shape` defines 2 permitted subtypes:
+--*
+--* 1. `Rectangle`
+--* 2. `Circle`
+--*
+--* __Declare an abstract method in a sealed interface__
+
+interface Shape
+    where record Rectange width Float; height Float
+    where record Circle radius Float
+do
+    fun area = Float end
+end
+
+--* __Implement an abstract for each subtype of a sealed interface__
+
+interface Shape
+    where record Rectange width Float; height Float
+    where record Circle radius Float
+do
+    fun area = Float end
+
+    impl fun area = Float for self Rectange do
+        return self.width * self.height;
+    end
+
+    impl fun area = Float for self Circle do
+        return std.math.PI * std.math.square self.radius;
+    end
+
+    fun area = Float for self Circle do
+    	return std.math.PI * std.math.square self.radius;
+    end
+end
+
+test Shape do
+    let shape Shape = Rectangle { width: 5; height: 5 };
+    let area = shape.area;
+    try std.testing.expect area.equals 25;
+end
+
+--* __Implement an abstract method for multiple subtypes of a sealed interface__
+
+interface Future
+    where record Pending
+    where record Running
+do
+    fun ifCompleted end
+
+    impl fun ifCompleted for Pending, Running end
+end
+
+--* __Extend a record to implement an interface__
+

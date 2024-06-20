@@ -1,0 +1,10 @@
+[[language]]
+name = "penny"
+scope = "source.penny"
+file-types = ["penny", "pen"]
+indent = { tab-width = 2, unit = " " }
+grammar = "penny"
+
+[[grammar]]
+name = "penny"
+source = { path = "/home/nyehamene/proj/tree-sitter-penny" }

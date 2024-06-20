@@ -1,0 +1,13 @@
+theme = "penny_autumn"
+
+[editor]
+line-number = "relative"
+rulers = [120]
+true-color = true
+
+[editor.statusline]
+left = ["mode", "spinner", "version-control", "file-name"]
+
+[editor.indent-guides]
+character = "╎"
+render = true

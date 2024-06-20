@@ -1,0 +1,264 @@
+--- # Okra Language Reference
+---
+--- ## Function
+---
+
+--* **Declare a function**
+
+fun sayHelloWorld() do
+    std.println("Hello, World!");
+end
+
+--* **Declare a function that takes one parameter**
+
+fun sayHello(name String) do
+    let message = std.str("Hello, \{name}");
+    std.println(message);
+end
+
+--* **Invoke a function**
+
+example "Invoking a function" do
+    --* call `sayHelloWorld` function
+    sayHelloWorld();
+    --* call `sayHello` function with an argument
+    sayHello("John");
+end
+
+--* **Declare a function that takes more than one parameter**
+
+fun sayGreeting(greeting String, name String) do
+    let message = std.str("\{greeting}, \{name}");
+    std.println(message);
+end
+
+example sayGreeting(String, String) do
+    sayGreeting("Hello", "John");
+end
+
+--* **Declare a function's return type**
+
+fun sayHello(): Void do
+    std.println("Hello");
+end
+
+--* **Return a value from a function**
+
+fun greetingByLanguage(lang String): String do
+    lang.equals("English") do return "Hello"; end
+    lang.equals("Spanish") do return "Hola"; end
+    return "";
+end
+
+--* **Define a split-function**
+
+fun say(greeting String) to(title String, name String) do
+   let message = std.str("\{greeting}, \{title} \{name}");
+   std.println(message);
+end
+
+example "Call a split-function with multiple arguments" do
+    say("Hello") to("Mr", "John");
+end
+
+--* **Return a value from a split-function**
+
+fun say(greeting String) to(name String): String do
+   let message = std.str("\{greeting}, \{name}");
+   return message;
+end
+
+test say(String) to(String) do
+    let msg = say("Hello") to("John");
+    try std.testing.expect(msg.equals("Hello, John"));
+end
+
+--* **Declare a function that take a function as argument**
+
+fun greetingByLang(lang String): String do
+    lang.equals("english") do return "Hello" end
+    lang.equals("spanish") do return "Hola" end
+    return "Hello";
+end
+
+fun greet(name String)
+   in(lang String)
+   using(langGreeting fn(String) String)
+do
+    let greeting = langGreeting(lang);
+    let message = std.str("\{greeting}, \{name}");
+    return message;
+end
+
+test greet(string) in(String) using(String) do
+    let msg = greet("John") in("english") using(fn: greetingByLang(String));
+    try std.testing.expect(msg.equals("Hello, John"));
+end
+
+--* ### Record
+
+--* **Declare a record**
+
+record Rectange end
+
+--* **Declare record components**
+
+record Rectange do
+  width Float;
+  height Float
+end
+
+example Rectange do
+    let rectange = Rectangle: { width: 5; height: 5 };
+    _ = rectange;
+end
+
+--* **Access a record component**
+
+example Rectange do
+    let rectangle = Rectangle: { width: 3; height: 4 };
+    std.println(rectangle.width, rectange.height);
+end
+
+--* ### Interface
+
+--* **Declare an empty interface**
+
+interface Shape end
+
+--* **Declare an abstract method in an interface**
+
+interface Shape do
+    fun area(): Float end
+end
+
+--* **Provide default implementation for abstract methods**
+
+interface Shape do
+    fun area(): Float end
+
+    impl fun area(): Float do
+        return 0;
+    end
+end
+
+--* ### Interface
+
+--* **interface declaration**
+
+interface Shape
+    where record Rectange width Float; height Float
+    where record Circle radius Float
+end
+
+--* The interface `Shape` defines 2 permitted subtypes:
+
+--* 1. `Rectangle`
+--* 2. `Circle`
+
+--* **Declare an abstract method in a interface**
+
+interface Shape
+    where record Rectange width Float; height Float
+    where record Circle radius Float
+do
+    fun area(): Float;
+end
+
+--* **Implement an abstract for each subtype of a interface**
+
+interface Shape
+    where record Rectange width Float; height Float
+    where record Circle radius Float
+do
+    fun area(): Float;
+
+    impl fun area(): Float for (self Rectange) do
+        return self.width * self.height;
+    end
+
+    impl fun area(): Float for (self Circle) do
+        return std.math.PI * std.math.square(self.radius);
+    end
+
+    fun area(): Float for (self Circle) do
+    	return std.math.PI * std.math.square(self.radius);
+    end
+end
+
+test Shape do
+    let shape Shape = Rectangle: { width: 5; height: 5 };
+    let area = shape.area();
+    try std.testing.expect(area.equals(25));
+end
+
+--* **Implement an abstract method for multiple subtypes of a interface**
+
+interface Future
+    where record Pending
+    where record Running
+do
+    fun ifCompleted() end
+
+    impl fun ifCompleted() for Pending, Running end
+end
+
+--* **Extend a record to implement an interface**
+
+--- ## let-in expression -- Done!
+
+--- ## Text block
+
+--- ## String template
+
+--- ## Block function
+
+--- ## try/or expressions
+
+--- ## impl fun statement
+
+--- ## Function type -- Done!
+
+--- ## Lambda expression
+
+--- ## Method reference
+
+--- ## Named parameters
+
+--- ## Import statement -- Done!
+
+--- ## Function call -- Done!
+
+--- ## Split function
+
+--- ## Block function call
+
+--- ## Case function may be a block/normal function
+
+--- ## Documentation
+
+    Leading and trailing documentation
+    must start with the name of the form being documented
+    (See golang doc)
+
+--- ## Method definition
+
+fun p Person fullname() string do end
+fun _ Person fullname() string do end
+fun p Person compare(p, other Person) int do end
+fun p Person equals(p, other Person) bool do end
+
+fun p Person compare(other Person, p) int do end
+fun p Person equals(other Person, p) bool do end
+
+fun s String repeat(n int) String do end
+
+let o = Person{}
+let p = Person{}
+let s = "x"
+
+p.fullname()
+p.compare(o)
+p.equals(o)
+s.repeat(10)
+

@@ -1,0 +1,157 @@
+# Okra
+
+## Features
+
+- [ ] Module
+- [ ] Namespace
+- [ ] Import
+
+  - [ ] Internal namespace import
+  - [ ] External namespace import
+  - [ ] Import list
+
+- [ ] Comment
+
+  - [ ] Single line
+  - [ ] Leading documentation comment
+  - [ ] Trailing documentation comment
+  - [ ] Embedded example documentation
+
+- [ ] Literals
+
+  - [ ] nil
+  - [ ] string
+
+    - [ ] Single line
+    - [ ] Multiline
+    - [ ] Template
+    - [ ] Escapes
+    - [ ] Formating (format specifiers)
+    - [ ] Regular expression (see lua)
+
+  - [ ] number
+
+    - [ ] Base ten
+    - [ ] Binary (base two)
+    - [ ] Octal (base eight)
+    - [ ] Hexa (base sixteen)
+    - [ ] Negative number
+
+  - [ ] Bool
+
+    - [ ] true
+    - [ ] false
+
+- [ ] Types
+
+  - [ ] void
+  - [ ] Function type
+  - [ ] Nullable types
+  - [ ] Composite types
+
+    - [ ] Array
+    - [ ] Slice
+    - [ ] Enum
+    - [ ] Record
+  
+  - [ ] Type alias
+
+- [ ] Variable
+- [ ] Function
+  
+  - [ ] Function
+  - [ ] Block function
+  - [ ] Split function
+  - [ ] Named argument (may not be supported)
+  - [ ] Variadic parameter
+  - [ ] Anonymous function (closures/lambda)
+  - [ ] Function and method reference
+
+- [ ] Union
+- [ ] Record
+- [ ] Enum
+- [ ] Interface
+- [ ] Alias
+- [ ] Case function set
+- [ ] Named case function set
+
+- [ ] Method
+- [ ] Constructor
+
+  - [ ] Constructor method (named `new` and has no parameter)
+  - [ ] Constructor block method (named `new` has no parameter, and has a block)
+
+- [ ] Generics
+
+  - [ ] Method
+  - [ ] Record
+  - [ ] Enum
+  - [ ] Interface
+  - [ ] Case function
+  - [ ] Union
+
+- [ ] Expressions
+
+  - [ ] Arithmetic
+  
+    - [ ] Addition
+    - [ ] Subtraction
+    - [ ] Multiplication
+    - [ ] Division
+    - [ ] Exponentiation
+    - [ ] Modulus
+
+  - [ ] Bitwise
+
+    - [ ] And
+    - [ ] Or
+    - [ ] Xor
+    - [ ] Not
+    - [ ] Shift left
+    - [ ] Shift right
+
+  - [ ] Relational
+
+    - [ ] Equal to
+    - [ ] Less than
+    - [ ] Greater than
+    - [ ] Less than or equal to
+    - [ ] Greater than or equal to
+    - [ ] Not equal to
+
+  - [ ] Logical
+
+    - [ ] and
+    - [ ] or
+    - [ ] not (!)
+    
+  - [ ] let-in
+  - [ ] try
+  - [ ] Function call
+  - [ ] Block function call
+  - [ ] Split function call
+  - [ ] With-expression
+
+- [ ] Statements
+
+  - [ ] let
+  - [ ] yield
+  - [ ] return
+  - [ ] goto
+  - [ ] defer (for closable resources)
+  - [ ] let-defer (for autoclosable resources)
+  - [ ] Switch statement
+
+- [ ] Continuation
+- [ ] Pointers (maybe)(to support mutability)(used platform-common instead)
+
+  - [ ] Prevent aliasing of poiner variable or parameter
+  - [ ] Prevent returning a pointer passed to a function from that function
+
+- [ ] Only one namespace (not the namespace declared in a source file)
+
+  - [ ] Prevent a function from shadowing a type or imported namespace
+  - [ ] Prevent a type from shadowing a function or imported namespace
+  - [ ] Prevent a namespace from shadowing a function or type
+  - [ ] Prevent a variable declared in the namespace block (if supported)
+        from shadowing a type or function, imported namespace
