@@ -338,3 +338,7 @@ build-*/
 docgen_tmp/
 
 # End of https://www.toptal.com/developers/gitignore/api/java,maven,vim,go,lua,zig,linux,eclipse,intellij+all,visualstudiocode,git
+
+# Intellij
+
+.idea/
