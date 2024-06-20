@@ -1,0 +1,27 @@
+Pen = NamespaceStatement ImportStatement TopLevelDeclarations .
+Pen = NamespaceStatement TopLevelDeclaration .
+
+TopLevelDeclarations = TopLevelDeclaration TopLevelDeclarations .
+TopLevelDeclarations = TopLevelDeclaration .
+
+InterfaceName = SimpleName .
+RecordName = SimpleName .
+EnumName = SimpleName .
+FunctionName = SimpleName .
+ExtensionTypeName = NamespacedName .
+
+PermittedSubtypes = PermittedSubtype PermittedSubtypes .
+PermittedSubtypes = PermittedSubtype .
+
+TopLevelDeclaration = TypeDeclaration .
+TopLevelDeclaration = "func" FunctionName FunctionSignature FunctionBody .
+TopLevelDeclaration = "extend" SimpleName ExtensionComponents "impl" ExtensionDelegation ExtensionBody .
+TopLevelDeclaration = "extend" SimpleName "impl" ExtensionTypeName ExtensionBody .
+
+TypeDeclaration = "sealed" "interface" InterfaceName PermittedSubtypes SealedInterfaceBody .
+TypeDeclaration = "interface" InterfaceName InterfaceBody .
+TypeDeclaration = "record" RecordName RecordComponents RecordBody .
+TypeDeclaration = "enum" EnumName EnumConstants EnumBody .
+
+PermittedSubtype = "permits"  TypeDeclaration .
+

@@ -1,0 +1,112 @@
+# Design ideas
+
+## Go lang
+
+1. Go documentation comment is great
+2. Automatic convertion when calling a method
+   declared with a pointer reciever on a value
+   receiver is not so great!
+3. Implicit implementation of an interface is great.
+4. Accept interfaces return struct is great but with a little twist
+
+   a. The interface accepted must be declared in the same module.
+   b. The struct (i.e record) returned must also be declared in the
+      module.
+
+5. Type assertion and type conversion
+
+   Type conversion happens at compile time, whereas
+   type assertion happens at runtime.
+
+   Idiomatic Go code uses the comma-ok idiom. In Okra/penny
+   type assertion may use block functions to handle failure
+   cases when the type assertion is wrong.
+
+   > On a second note, one of my earlier goals was to avoid casting
+   or any form of type assertion.
+   I planed for the language to borrow from smalltalk which has no
+   form of type assertion but instead relies on virtual dispatch.
+   This maybe possible in okra/penny using interfaces.
+   This may also (preferable) with a case interface.
+
+6. In _Go_ functions can implement interfaces. I like the idea
+   but is this different from function or method reference?
+
+   I think that both features archieve the same goals. So choose one
+   among the two.
+
+   ```okra
+
+   type[T] Comparable fn interface
+	 fun compare(T, T) int end
+   end
+
+   fun process(c Comparable) do end
+
+   let compareInt fn(int, int) int = math.min;
+   let compareStr fn(String, String)int = str.min_length;
+
+   -- Implement a functional interface through type conversion
+   let ci Comparable[Int] = fun(compareInt);
+   let cs Comparable[String] = fun(compareStr);
+
+   -- alternatively omitting intermidiate steps
+   let cii Comparable[Int] = fun(math.min)
+   let css Comparable[String] = fun(str.min_length)
+
+   process(ci)
+   process(cs)
+   ```
+
+## Idea for constructors
+
+```okra
+type Range class
+  start int;
+  end   int;
+end 
+
+--- new is a constructor for `Range` class
+fun r Range new() Range do
+   let inValid bool = r.start > r.end;
+   inValid.if_true() do
+     -- what happens here
+     -- * return an error as the last value in multiple value return statement
+     -- ** This will require multiple returns in the language
+     -- * panic
+     -- ** This will require some kind of error mechanism unlike in `go`
+     -- ** And a way to detect that an error has occurred
+     -- ** Both point are outside the scope of `okra`
+     -- * use a block
+     -- ** This will make the use site verbose/awkward
+     -- ** Would also extend the constructor method `new` to include
+     --    block methods.
+   end
+end
+
+fun main() do
+   let r1 = Range { start = 2; end = 1 } -- error here
+   let r2 = Range { start = 0; end = 1 } -- ok here
+
+   let re1, err = Range { start = 2; end = 1 }
+   let re2 = Range { start = 2; end = 1 } else do end
+end
+```
+
+## Compile time constructor
+
+```okra
+fun comptime o T new() T do end
+fun comptime o T new() T b block() do end
+```
+
+## Enums (under the hood)
+
+Implement enums by combining the following
+
+1. `union` types
+2. `case-functions`
+3. `embedded record`
+
+* This requires a way to st
+

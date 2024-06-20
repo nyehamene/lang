@@ -1,0 +1,124 @@
+Program do NamespaceStatement ImportStatements TopLevelDefinitions end
+Program do NamespaceStatement TopLevelDefinitions end
+Program do NamespaceStatement end
+Program do end
+
+NamespaceStatement do "namespace"  namespaceIdentifier ";" end
+ImportStatements do ImportStatement ImportStatements end
+ImportStatements do ImportStatement end
+
+namespaceIdentifier do Identifier "."  namespaceIdentifier end
+namespaceIdentifier do Identifier end
+ImportStatement do "import" importIdentifier ";" end
+ImportStatement do "import" "(" importIdentifiers ")" end
+ImportStatement do "import" "(" importIdentifiers ")" ";" end
+importIdentifiers do importIdentifier "," importIdentifiers end
+importIdentifiers do importIdentifier end
+importIdentifier do Identifier  namespaceIdentifier end
+
+TopLevelDefinitions do TopLevelDefinition TopLevelDefinitions end
+TopLevelDefinitions do TopLevelDefinition end
+TopLevelDefinition do TypeDefinition end
+TopLevelDefinition do FunctionDefinition end
+TopLevelDefinition do MethodDefinition end
+TopLevelDefinition do TestDefinition end
+TopLevelDefinition do ExampleDefinition end
+TopLevelDefinition do Comment end
+TopLevelDefinition do Documentation end
+
+TypeDefinition do "type" Enum end
+TypeDefinition do typeHeader Record end
+TypeDefinition do typeHeader Interface end
+TypeDefinition do typeHeader CaseFunction end
+TypeDefinition do typeHeader Union end
+TypeDefinition do typeHeader TypeAlias end
+
+typeHeader do "type" "[" TypeParameters "]" end
+typeHeader do "type" end
+
+TypeParameters do TypeParameter "," TypeParameters end
+TypeParameters do TypeParameter end
+TypeParameter do upper_char end
+
+Record do typeIdentifier "record" RecordComponents "end" end
+Record do typeIdentifier "record" "end" end
+RecordComponents do RecordComponent ";" RecordComponents end
+RecordComponents do RecordComponent ";" end
+RecordComponent do Identifier Type ";" end
+
+Enum do typeIdentifier "enum" EnumComponents "end" end
+Enum do typeIdentifier "enum" "end"
+EnumComponents do EnumComponent ";" EnumComponents end
+EnumComponents do EnumComponent end
+EnumComponent do Identifier Type "=" ConstantValue end
+EnumComponent do Identifier "=" ConstantValue end
+EnumComponent do Identifier end
+
+Interface do typeIdentifier "interface" InterfaceMethods "end" end
+Interface do typeIdentifier "interface" "end" end
+InterfaceMethods do InterfaceMethod InterfaceMethods end
+InterfaceMethods do InterfaceMethod end
+InterfaceMethod do functionHeader InterfaceSimpleMethod "end" end
+InterfaceMethod do functionHeader InterfaceSplitMethod "end" end
+
+InterfaceSimpleMethod do Identifier interfaceMethodHeader end
+InterfaceSplitMethod do Identifier interfaceMethodHeader interfaceMethodSplits end
+
+interfaceMethodHeader do
+	"(" InterfaceMethodParameters ")" Type
+	"(" InterfaceMethodParameters ")" Type "block" "(" BlockParameterTypes ")" 
+	"(" InterfaceMethodParameters ")" Type "block" "(" ")"
+	"(" InterfaceMethodParameters ")" "block" "(" BlockParameterTypes ")" 
+	"(" InterfaceMethodParameters ")" "block" "(" ")"
+	"(" InterfaceMethodParameters ")"
+end
+
+InterfaceMethodParameters do
+	InterfaceMethodParameter
+	","
+	InterfaceMethodParameters
+end 
+
+InterfaceMethodParameters do InterfaceMethodParameter "," InterfaceMethodParameters end
+InterfaceMethodParameters do InterfaceMethodParameter end
+InterfaceMethodParameter do BlockParameterTypes end
+InterfaceMethodParameter do MethodParameters end
+
+BlockParameterTypes do Type "," BlockParameterTypes end
+BlockParameterTypes do Type end
+
+interfaceMethodSplits do interfaceMethodSplit interfaceMethodSplits end
+interfaceMethodSplits do interfaceMethodSplit end
+interfaceMethodSplit do Identifier interfaceMethodHeader end
+
+CaseFunction do typeIdentifier "case" CaseMethods "end" end
+CaseMethods do CaseMethod CaseMethods end
+CaseMethods do CaseMethod end
+CaseMethod do InterfaceMethod end
+
+Union do typeIdentifier "union" UnionTypes "end" end
+UnionTypes do UnionType ";" UnionTypes end
+UnionTypes do UnionType end
+UnionType do typeIdentifier end
+
+TypeAlias do typeIdenifier Type end
+
+FunctionDefinition do end
+MethodDefinition do end
+TestDefinition do end
+ExampleDefinition do end
+
+Comment do "-" "-" ... "\n" end
+
+Documentation do LeadingDocumentation end
+Documentation do TrailingDocumentation end
+LeadingDocumentation do "-" "-" "-" Identifier ... "\n" end
+LeadingDocumentation do "-" "-" "+" Identifier ... "\n" end
+
+-- TBD
+
+Type do end
+
+Identifier do end
+typeIdentifier do end
+ConstantValue do end

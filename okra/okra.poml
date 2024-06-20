@@ -1,0 +1,28 @@
+import Editor "github.com/okra/tools/editor"
+
+module = okra.core
+okra = 0.1
+
+-- provide module dependencies
+Dependencies:
+  implementation = "github.com/okra/core/data-structure"
+  test = "github.com/okra/core/testing"
+end
+
+-- provide editor config
+Editor:
+  tab_width = "spaces"
+  indent_style = "space"
+  indent_size = 3
+  line_ending = "LF"
+  encoding = "UTF"
+end
+
+fun build() do
+-- provide custom build code
+end
+
+fun generate_do(ctx) do
+-- custom function to generate documentation
+-- must be called in build (otherwise is an error)
+end

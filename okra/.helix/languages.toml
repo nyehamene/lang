@@ -1,0 +1,10 @@
+[[language]]
+name = "okra"
+scope = "source.okra"
+file-types = [ "okra" ]
+indent = { tab-width = 2, unit = " " }
+grammar = "okra"
+
+[[grammar]]
+name = "okra"
+source = { path = "/home/nyehamene/proj/tree-sitter/tree-sitter-okra" }
