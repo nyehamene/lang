@@ -10,7 +10,6 @@ type Type int
 const (
 	Identifier Type = iota
 	Value
-	DQuote
 	Regex
 	Do
 	End

@@ -22,13 +22,16 @@ const (
 	ErrUnterminatedRegex
 	ErrEmptyValue
 	ErrEmptyRegex
+	ErrInvalidEscape
 )
 
 var tokenErrMsg = map[Error]string{
-	ErrUnterminatedValue: "Unterminated value",
-	ErrUnterminatedRegex: "Unterminated regex",
-	ErrEmptyRegex:        "Empty regex",
-	ErrEmptyValue:        "Empty value",
+	EOF:                  "<EOF>",
+	ErrUnterminatedValue: "<Unterminated value>",
+	ErrUnterminatedRegex: "<Unterminated regex>",
+	ErrEmptyRegex:        "<Empty regex>",
+	ErrEmptyValue:        "<Empty value>",
+	ErrInvalidEscape:     "<Invalid Escape>",
 }
 
 var NO_TOKEN token.Token
@@ -78,11 +81,6 @@ func (t *Tokenizer) Tokenize() (_ token.Token, err error) {
 		}
 		token = regex
 	case '"':
-		if escape, err := t.doubleQuote(); err {
-			token = escape
-			break
-		}
-
 		quoted, err := t.value()
 		if err != nil {
 			return NO_TOKEN, err
@@ -121,25 +119,25 @@ func (t *Tokenizer) regex() (_ token.Token, err error) {
 	return token.Token{Value: regex, Kind: token.Regex}, nil
 }
 
-func (t *Tokenizer) doubleQuote() (_ token.Token, ok bool) {
+func (t *Tokenizer) escape() (_ string, err error) {
 	start := t.current
 
 	defer func() {
-		if !ok {
+		if err != nil {
 			t.current = start
 		}
 	}()
 
-	if !t.match('"') {
-		return NO_TOKEN, false
+	switch current := t.advance(); current {
+	case '"':
+		return "\"", nil
+	case 'n':
+		return "\n", nil
+	case 'r':
+		return "", nil
+	default:
+		return "", ErrInvalidEscape
 	}
-
-	if !t.match('"') {
-		return NO_TOKEN, false
-	}
-
-	token := token.Token{Value: "\"", Kind: token.DQuote}
-	return token, true
 }
 
 func (t *Tokenizer) value() (_ token.Token, err error) {
@@ -154,14 +152,21 @@ func (t *Tokenizer) value() (_ token.Token, err error) {
 	var quoted string
 
 	for !t.peek('"') && !t.IsAtEnd() {
-		current := t.advance()
-		quoted += string(current)
+		switch current := t.advance(); current {
+		case '\\':
+			escape, err := t.escape()
+			if err != nil {
+				return NO_TOKEN, err
+			}
+			quoted += string(escape)
+		default:
+			quoted += string(current)
+		}
 	}
 
 	if !t.match('"') {
 		return NO_TOKEN, ErrUnterminatedValue
 	}
-
 	if quoted == "" {
 		return NO_TOKEN, ErrEmptyValue
 	}
@@ -221,7 +226,7 @@ func (t *Tokenizer) match(b byte) bool {
 func (te Error) Error() string {
 	msg, ok := tokenErrMsg[te]
 	if !ok {
-		return "unexpected token"
+		return "unexpected tokenizer error"
 	}
 	return msg
 }

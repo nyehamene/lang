@@ -24,20 +24,45 @@ var tokenizerTestData = []struct {
 
 	{
 		Name:   "value",
-		Source: "\"xx\"",
+		Source: `"xx"`,
 		Token:  token.Token{Kind: token.Value, Value: "xx"},
 	},
 
 	{
 		Name:   "empty value",
-		Source: "\"\"",
+		Source: `""`,
 		Err:    tokenizer.ErrEmptyValue,
 	},
 
 	{
 		Name:   "dquote",
-		Source: "\"\"\"",
-		Token:  token.Token{Kind: token.DQuote, Value: "\""},
+		Source: `"\""`,
+		Token:  token.Token{Kind: token.Value, Value: "\""},
+	},
+
+	{
+		Name:   "lf",
+		Source: `"\n"`,
+		Token:  token.Token{Kind: token.Value, Value: "\n"},
+	},
+
+	{
+		// ignore carrage return cr
+		Name:   "cr",
+		Source: `"\r"`,
+		Err:    tokenizer.ErrEmptyValue,
+	},
+
+	{
+		Name:   "crlf",
+		Source: `"\r\n"`,
+		Token:  token.Token{Kind: token.Value, Value: "\n"},
+	},
+
+	{
+		Name:   "invalid escape",
+		Source: `"\a"`,
+		Err:    tokenizer.ErrInvalidEscape,
 	},
 
 	{
@@ -66,13 +91,13 @@ var tokenizerTestData = []struct {
 
 	{
 		Name:   "unterminated value 1",
-		Source: "\"",
+		Source: `"`,
 		Err:    tokenizer.ErrUnterminatedValue,
 	},
 
 	{
 		Name:   "unterminated value 2",
-		Source: "\"x",
+		Source: `"x`,
 		Err:    tokenizer.ErrUnterminatedValue,
 	},
 
@@ -131,6 +156,7 @@ var parserTestData = []struct {
 			},
 		},
 	},
+
 	{
 		Name:   "quote",
 		Source: "a do \"x\" end",
@@ -147,6 +173,7 @@ var parserTestData = []struct {
 			},
 		},
 	},
+
 	{
 		Name:   "regex",
 		Source: "a do /x/ end",
@@ -163,6 +190,7 @@ var parserTestData = []struct {
 			},
 		},
 	},
+
 	{
 		Name:   "mix 1",
 		Source: "n do y \"x\" /z/ end",
@@ -183,6 +211,7 @@ var parserTestData = []struct {
 			},
 		},
 	},
+
 	{
 		Name:   "mix 2",
 		Source: "n do \"x\" /z/ y end",
@@ -203,6 +232,7 @@ var parserTestData = []struct {
 			},
 		},
 	},
+
 	{
 		Name:   "error 1",
 		Source: "n y end",
@@ -213,6 +243,7 @@ var parserTestData = []struct {
 		},
 		RuleErr: parser.ErrExpectedKeywordDo,
 	},
+
 	{
 		Name:   "error 2",
 		Source: "n do y",
@@ -223,6 +254,7 @@ var parserTestData = []struct {
 		},
 		RuleErr: parser.ErrExpectedKeywordEnd,
 	},
+
 	{
 		Name:   "error 3",
 		Source: "do y end",
@@ -233,6 +265,7 @@ var parserTestData = []struct {
 		},
 		RuleErr: parser.ErrExpectedIdentifier,
 	},
+
 	{
 		Name:   "error 4",
 		Source: "a b do y end",
@@ -245,6 +278,7 @@ var parserTestData = []struct {
 		},
 		RuleErr: parser.ErrExpectedKeywordDo,
 	},
+
 	{
 		Name:     "error 5",
 		Source:   "a do \" end",
