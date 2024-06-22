@@ -128,7 +128,9 @@ and function/method return type.
 In other words, nullable types maybe used in variable definition in
 a let statements only.
 
-## Interface Conversion
+## Type Conversion
+
+### Type to interface convertion
 
 Support conversion from any type to an interface.
 The conversion must be checked at compile time and
@@ -153,20 +155,22 @@ fun p Person greet() String {
 
 namepsace main;      -- main.okra
 fun main() do
-   let p = Person
-           { firstName = "John"
-           , lastName = "Doe"
-           };
-
-  --  let p = Person{
-  --          firstName = "John",
-  --          lastName = "Doe",
-  --          };
+   let p =
+       Person{
+       firstName = "John",
+       lastName = "Doe",
+       };
 
    let g Greeter = interface(p) -- interface conversion
+
+   -- complementary and more advance syntax
+   let g Greeter(Person) = interface(p)
+
+   -- with a type from another namespace
+   let g Greeter(ns.Person) = interface(p)
+
    println(g.greet())
 end
-
 ```
 
 1. A method can be defined on any type in any namespace scope
@@ -178,6 +182,55 @@ end
    that defines a method whose signature matches with the signature of
    the target method.
 
+### Function to interface conversion
+
+Convert a function/method to an interface with a single method
+so called (functional interface).
+
+```okra
+type[a] Comparable interface
+  compare(a, a) int;
+end
+
+type Person record
+  age Int;
+end
+
+fun compareByAge(a Person, b Person) int do end
+
+fun p Person ageGreater(p, b Person) int do end
+
+fun main() do
+   let p Person = ...;
+   let c1 Comparable[Person] = fun(p.ageGreater); -- method to interface conversion
+   let c2 Comparable[Person] = fun(compareByAge); -- fun to interface conversion
+end
+```
+
+### Interface to record conversion
+
+Convert an interface to an instance of a record type. Any method in an
+interface that take no parameters, whose name and return type matches
+the name and type of a record field is treated as an accessor. The accessor
+method for each field is called to produce an instance of the record.
+
+```okra
+type User interface
+   name() String
+   age() Int
+end
+
+type Person record
+   name String;
+   age Int;
+end
+
+fun convert(u User) Person do
+   let p Person = record(u); -- interface to record conversion
+   return p;
+end
+```
+
 ## Let-type variable and implicity end
 
 It is illegal to define a type inside a function/method block.
@@ -188,40 +241,117 @@ local type assigned to a varaible.
 ```okra
 -- define a local interface
 let User type = 
-         interface
-            fullname() String;
-         end
+    interface
+    fullname() String;
+    end;
 
 -- define a local enum
 let Gender type =
-           enum
-             Male;
-             Female;
-           end
+    enum
+    Male;
+    Female;
+    end;
 
 -- define a local struct
 let Person type =
-           struct
-              name String;
-              gender Gender;
-           end
+    struct
+    name String;
+    gender Gender;
+    end;
 
 -- define a local method
-let Person type =
-           fun fullname() String do
-               return p.name
-           end
+let p Person type =
+    fun fullname() String do
+    return p.name
+    end;
+
+-- define a local function that does not capture any values from the enclosing scope
+let greet_person type =
+   fun(p Person) do
+   let fullname = p.fullName() -- call a local method
+   return "Hello \{fullname}"
+   end;
 
 -- create a variable whose type is a local type
 let p = Person{
         name = "John";
         gender = Gender.Male;
-        }
+        };
 
--- invoke a local method
+-- call a local method
 p.fullname()
+
+-- call a local function
+greet_person(p)
 ```
 
 The idea it to make the closing `end` keyword for type,
 function and method declaration in the top level block optional.
 The compiler should be able to implicitly insert a the keyword.
+
+While parsing a function, for example, if the parser encounters
+another top level declaration (fun, type, etc) then it inserts
+the keyword `end` and stops processing the current function.
+
+```okra
+fun foo() do
+  let name = "John"
+  name.upperCase()
+
+-- is equivalent to
+fun foo() do
+   let name = "John"
+   name.upperCase()
+end
+```
+
+### let-type of fun
+
+A function defined with _let-type_ idiom cannot capture values
+from the enclosing scope. Whereas, a function assigned to a variable
+whose type is a function type using the normal variable declaration
+syntax can capture variables from the enclosing scope.
+
+```okra
+let two = 2; -- captured by the following functions
+let addTwo fun(int) int =
+    fun(a int, b int) int do
+       return a + two;
+    end;
+
+let subTwo = 
+    fun(a int, b int) int do
+       return a - two;
+    end;
+```
+
+## Alternate block syntax
+
+Consider using `{` and `}` to define blocks.
+
+```okra
+fun main() {}
+type User interface {}
+type Person record {}
+type Gender enum {}
+if_true() do {}
+```
+
+Then use `[` and `]` for data blocks.
+
+```okra
+let p =
+    Person[
+    firstName = "John",
+    lastName = "Doe",
+    ]
+```
+
+## Implicit semicolon
+
+## Method type signature and Method-function type signature
+
+## Zig like generics
+
+## let-defer
+
