@@ -131,7 +131,6 @@ a let statements only.
 ## Interface Conversion
 
 Support conversion from any type to an interface.
-Reuse the syntax for type cast.
 The conversion must be checked at compile time and
 must result in a compile time error if the operand
 does not conform to the interface.
@@ -154,12 +153,18 @@ fun p Person greet() String {
 
 namepsace main;      -- main.okra
 fun main() do
-   let p = Person{ firstName = "John"
-                 , lastName = "Doe"
-                 };
+   let p = Person
+           { firstName = "John"
+           , lastName = "Doe"
+           };
 
-   let greater = Greeter(p) -- interface conversion
-   println(greater.greet())
+  --  let p = Person{
+  --          firstName = "John",
+  --          lastName = "Doe",
+  --          };
+
+   let g Greeter = interface(p) -- interface conversion
+   println(g.greet())
 end
 
 ```
@@ -172,3 +177,51 @@ end
    converted via _interface conversion_, to an instance of any interface
    that defines a method whose signature matches with the signature of
    the target method.
+
+## Let-type variable and implicity end
+
+It is illegal to define a type inside a function/method block.
+Instead use a _let-type_ statement.
+A _let-type_ statement is a _let_ statement use for defining a
+local type assigned to a varaible.
+
+```okra
+-- define a local interface
+let User type = 
+         interface
+            fullname() String;
+         end
+
+-- define a local enum
+let Gender type =
+           enum
+             Male;
+             Female;
+           end
+
+-- define a local struct
+let Person type =
+           struct
+              name String;
+              gender Gender;
+           end
+
+-- define a local method
+let Person type =
+           fun fullname() String do
+               return p.name
+           end
+
+-- create a variable whose type is a local type
+let p = Person{
+        name = "John";
+        gender = Gender.Male;
+        }
+
+-- invoke a local method
+p.fullname()
+```
+
+The idea it to make the closing `end` keyword for type,
+function and method declaration in the top level block optional.
+The compiler should be able to implicitly insert a the keyword.
