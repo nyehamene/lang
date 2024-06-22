@@ -3,7 +3,7 @@
 ## Go lang
 
 1. Go documentation comment is great
-2. Automatic convertion when calling a method
+2. Automatic conversion when calling a method
    declared with a pointer reciever on a value
    receiver is not so great!
 3. Implicit implementation of an interface is great.
@@ -110,3 +110,65 @@ Implement enums by combining the following
 
 * This requires a way to st
 
+## Nullable types
+
+Syntax
+
+```okra
+let name ?String = nil
+
+-- alternative syntax
+
+let name String? = nil
+```
+
+Nullable types should not be allowed in function/method parameters
+and function/method return type.
+
+In other words, nullable types maybe used in variable definition in
+a let statements only.
+
+## Interface Conversion
+
+Support conversion from any type to an interface.
+Reuse the syntax for type cast.
+The conversion must be checked at compile time and
+must result in a compile time error if the operand
+does not conform to the interface.
+
+```okra
+namespace greeter;     -- greeter.okra
+type Greeter interface
+   greet() String;
+end
+
+namespace person;     -- person.okra
+type Person struct
+   firstName String;
+   lastName String;
+end
+
+fun p Person greet() String {
+   return "Hello, \{p.firstName}, \{p.lastName}!"
+}
+
+namepsace main;      -- main.okra
+fun main() do
+   let p = Person{ firstName = "John"
+                 , lastName = "Doe"
+                 };
+
+   let greater = Greeter(p) -- interface conversion
+   println(greater.greet())
+end
+
+```
+
+1. A method can be defined on any type in any namespace scope
+2. A method can be invoke directly on an object only in the namespace
+   in which the method was defined for the type of the object.
+3. To invoke a method on an object in any namespace separate for the
+   namespace where the method was defined, the object must first be
+   converted via _interface conversion_, to an instance of any interface
+   that defines a method whose signature matches with the signature of
+   the target method.
