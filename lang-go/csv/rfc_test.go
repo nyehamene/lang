@@ -47,7 +47,9 @@ var Rfc = []struct {
 				{Value: "yyy", Token: token.Value},
 				{Value: "xxx", Token: token.Value},
 			},
-		}},
+		},
+	},
+
 	{
 		Name:   "rule2",
 		Source: "aaa,bbb,ccc\nzzz,yyy,xxx",
@@ -78,6 +80,7 @@ var Rfc = []struct {
 			},
 		},
 	},
+
 	{
 		Name:   "rule4.1",
 		Source: "aaa, bbb,ccc\nzzz,yyy,xxx\n",
@@ -108,6 +111,7 @@ var Rfc = []struct {
 				{Value: "xxx", Token: token.Value},
 			}},
 	},
+
 	{
 		Name:   "rule5",
 		Source: "\"aaa\",\"bbb\",\"ccc\"\nzzz,yyy,xxx",
@@ -138,6 +142,7 @@ var Rfc = []struct {
 			},
 		},
 	},
+
 	{
 		Name:   "rule6",
 		Source: "\"aaa\",\"b\nbb\",\"ccc\"\nzzz,yyy,xxx\n",
@@ -169,6 +174,7 @@ var Rfc = []struct {
 			},
 		},
 	},
+
 	{
 		Name:   "rule7",
 		Source: "\"aaa\",\"b\"\"bb\",\"ccc\"\nzzz,yyy,xxx",
