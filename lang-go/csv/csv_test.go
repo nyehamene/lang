@@ -18,354 +18,160 @@ var testdata = []struct {
 	Err     error
 }{
 	{
-		Name:   "first",
-		Source: "x",
+		Name: "value",
+		Source: `a,a,a
+,,
+a,,
+a,a,
+,,a
+,a,a
+`,
 		Fields: []token.Token{
-			{Value: "x", Token: token.Value},
-		},
-		Records: []parser.Record{
-			{token.Token{Value: "x", Token: token.Value}},
-		},
-		Err: nil,
-	},
-
-	{
-		Name:   "first quoted",
-		Source: `"x"`,
-		Fields: []token.Token{
-			{Value: "x", Token: token.EscapedValue},
-		},
-		Records: []parser.Record{
-			{token.Token{Value: "x", Token: token.EscapedValue}},
-		},
-		Err: nil,
-	},
-
-	{
-		Name:   "second",
-		Source: "x,y",
-		Fields: []token.Token{
-			{Value: "x", Token: token.Value},
+			{Value: "a", Token: token.Value},
 			{Value: ",", Token: token.Comma},
-			{Value: "y", Token: token.Value},
-		},
-		Records: []parser.Record{
-			{
-				token.Token{Value: "x", Token: token.Value},
-				token.Token{Value: "y", Token: token.Value},
-			},
-		},
-		Err: nil,
-	},
-
-	{
-		Name:   "second quoted",
-		Source: `"x","y"`,
-		Fields: []token.Token{
-			{Value: "x", Token: token.EscapedValue},
+			{Value: "a", Token: token.Value},
 			{Value: ",", Token: token.Comma},
-			{Value: "y", Token: token.EscapedValue},
-		},
-		Records: []parser.Record{
-			{
-				token.Token{Value: "x", Token: token.EscapedValue},
-				token.Token{Value: "y", Token: token.EscapedValue},
-			},
-		},
-		Err: nil,
-	},
-
-	{
-		Name:   "third",
-		Source: ",,y",
-		Fields: []token.Token{
-			{Value: ",", Token: token.Comma},
-			{Value: ",", Token: token.Comma},
-			{Value: "y", Token: token.Value},
-		},
-		Records: []parser.Record{
-			{
-				token.Token{Value: "", Token: token.Null},
-				token.Token{Value: "", Token: token.Null},
-				token.Token{Value: "y", Token: token.Value},
-			},
-		},
-		Err: nil,
-	},
-
-	{
-		Name:   "third quoted",
-		Source: `,,"y"`,
-		Fields: []token.Token{
-			{Value: ",", Token: token.Comma},
-			{Value: ",", Token: token.Comma},
-			{Value: "y", Token: token.EscapedValue},
-		},
-		Records: []parser.Record{
-			{
-				token.Token{Value: "", Token: token.Null},
-				token.Token{Value: "", Token: token.Null},
-				token.Token{Value: "y", Token: token.EscapedValue},
-			},
-		},
-		Err: nil,
-	},
-
-	{
-		Name:   "fourth",
-		Source: "x,y\n",
-		Fields: []token.Token{
-			{Value: "x", Token: token.Value},
-			{Value: ",", Token: token.Comma},
-			{Value: "y", Token: token.Value},
+			{Value: "a", Token: token.Value},
 			{Value: "\n", Token: token.Newline},
-		},
-		Records: []parser.Record{
-			{
-				token.Token{Value: "x", Token: token.Value},
-				token.Token{Value: "y", Token: token.Value},
-			},
-		},
-		Err: nil,
-	},
-
-	{
-		Name:   "fourth quoted",
-		Source: "\"x\",\"y\"\n",
-		Fields: []token.Token{
-			{Value: "x", Token: token.EscapedValue},
 			{Value: ",", Token: token.Comma},
-			{Value: "y", Token: token.EscapedValue},
-			{Value: "\n", Token: token.Newline},
-		},
-		Records: []parser.Record{
-			{
-				token.Token{Value: "x", Token: token.EscapedValue},
-				token.Token{Value: "y", Token: token.EscapedValue},
-			},
-		},
-		Err: nil,
-	},
-
-	{
-		Name:   "fifth",
-		Source: "x,y\na,b\n",
-		Fields: []token.Token{
-			{Value: "x", Token: token.Value},
 			{Value: ",", Token: token.Comma},
-			{Value: "y", Token: token.Value},
 			{Value: "\n", Token: token.Newline},
 			{Value: "a", Token: token.Value},
 			{Value: ",", Token: token.Comma},
-			{Value: "b", Token: token.Value},
+			{Value: ",", Token: token.Comma},
+			{Value: "\n", Token: token.Newline},
+			{Value: "a", Token: token.Value},
+			{Value: ",", Token: token.Comma},
+			{Value: "a", Token: token.Value},
+			{Value: ",", Token: token.Comma},
+			{Value: "\n", Token: token.Newline},
+			{Value: ",", Token: token.Comma},
+			{Value: ",", Token: token.Comma},
+			{Value: "a", Token: token.Value},
+			{Value: "\n", Token: token.Newline},
+			{Value: ",", Token: token.Comma},
+			{Value: "a", Token: token.Value},
+			{Value: ",", Token: token.Comma},
+			{Value: "a", Token: token.Value},
 			{Value: "\n", Token: token.Newline},
 		},
+
 		Records: []parser.Record{
 			{
-				token.Token{Value: "x", Token: token.Value},
-				token.Token{Value: "y", Token: token.Value},
+				{Value: "a", Token: token.Value},
+				{Value: "a", Token: token.Value},
+				{Value: "a", Token: token.Value},
 			},
+
 			{
-				token.Token{Value: "a", Token: token.Value},
-				token.Token{Value: "b", Token: token.Value},
+				{Value: "", Token: token.Null},
+				{Value: "", Token: token.Null},
+				{Value: "", Token: token.Null},
+			},
+
+			{
+
+				{Value: "a", Token: token.Value},
+				{Value: "", Token: token.Null},
+				{Value: "", Token: token.Null},
+			},
+
+			{
+				{Value: "a", Token: token.Value},
+				{Value: "a", Token: token.Value},
+				{Value: "", Token: token.Null},
+			},
+
+			{
+				{Value: "", Token: token.Null},
+				{Value: "", Token: token.Null},
+				{Value: "a", Token: token.Value},
+			},
+
+			{
+				{Value: "", Token: token.Null},
+				{Value: "a", Token: token.Value},
+				{Value: "a", Token: token.Value},
 			},
 		},
 		Err: nil,
 	},
 
 	{
-		Name:   "fifth quoted",
-		Source: "\"x\",\"y\"\n\"a\",\"b\"\n",
+		Name: "value",
+		Source: `"a","a","a"
+,,
+"a",,
+"a","a",
+,,"a"
+,"a","a"
+`,
 		Fields: []token.Token{
-			{Value: "x", Token: token.EscapedValue},
-			{Value: ",", Token: token.Comma},
-			{Value: "y", Token: token.EscapedValue},
-			{Value: "\n", Token: token.Newline},
 			{Value: "a", Token: token.EscapedValue},
 			{Value: ",", Token: token.Comma},
-			{Value: "b", Token: token.EscapedValue},
-			{Value: "\n", Token: token.Newline},
-		},
-		Records: []parser.Record{
-			{
-				token.Token{Value: "x", Token: token.EscapedValue},
-				token.Token{Value: "y", Token: token.EscapedValue},
-			},
-			{
-				token.Token{Value: "a", Token: token.EscapedValue},
-				token.Token{Value: "b", Token: token.EscapedValue},
-			},
-		},
-		Err: nil,
-	},
-
-	{
-		Name:   "sixth",
-		Source: "x,\na,b",
-		Fields: []token.Token{
-			{Value: "x", Token: token.Value},
+			{Value: "a", Token: token.EscapedValue},
 			{Value: ",", Token: token.Comma},
+			{Value: "a", Token: token.EscapedValue},
 			{Value: "\n", Token: token.Newline},
-			{Value: "a", Token: token.Value},
 			{Value: ",", Token: token.Comma},
-			{Value: "b", Token: token.Value},
-		},
-		Records: []parser.Record{
-			{
-				token.Token{Value: "x", Token: token.Value},
-				token.Token{Token: token.Null},
-			},
-			{
-				token.Token{Value: "a", Token: token.Value},
-				token.Token{Value: "b", Token: token.Value},
-			},
-		},
-		Err: nil,
-	},
-
-	{
-		Name:   "sixth quoted",
-		Source: "\"x\",\n\"a\",\"b\"",
-		Fields: []token.Token{
-			{Value: "x", Token: token.EscapedValue},
 			{Value: ",", Token: token.Comma},
 			{Value: "\n", Token: token.Newline},
 			{Value: "a", Token: token.EscapedValue},
 			{Value: ",", Token: token.Comma},
-			{Value: "b", Token: token.EscapedValue},
-		},
-		Records: []parser.Record{
-			{
-				token.Token{Value: "x", Token: token.EscapedValue},
-				token.Token{Token: token.Null},
-			},
-			{
-				token.Token{Value: "a", Token: token.EscapedValue},
-				token.Token{Value: "b", Token: token.EscapedValue},
-			},
-		},
-		Err: nil,
-	},
-
-	{
-		Name:   "seventh",
-		Source: "x,y\na,",
-		Fields: []token.Token{
-			{Value: "x", Token: token.Value},
 			{Value: ",", Token: token.Comma},
-			{Value: "y", Token: token.Value},
-			{Value: "\n", Token: token.Newline},
-			{Value: "a", Token: token.Value},
-			{Value: ",", Token: token.Comma},
-		},
-		Records: []parser.Record{
-			{
-				token.Token{Value: "x", Token: token.Value},
-				token.Token{Value: "y", Token: token.Value},
-			},
-			{
-				token.Token{Value: "a", Token: token.Value},
-				token.Token{Token: token.Null},
-			},
-		},
-		Err: nil,
-	},
-
-	{
-		Name:   "seventh quoted",
-		Source: "\"x\",\"y\"\n\"a\",",
-		Fields: []token.Token{
-			{Value: "x", Token: token.EscapedValue},
-			{Value: ",", Token: token.Comma},
-			{Value: "y", Token: token.EscapedValue},
 			{Value: "\n", Token: token.Newline},
 			{Value: "a", Token: token.EscapedValue},
 			{Value: ",", Token: token.Comma},
-		},
-		Records: []parser.Record{
-			{
-				token.Token{Value: "x", Token: token.EscapedValue},
-				token.Token{Value: "y", Token: token.EscapedValue},
-			},
-			{
-				token.Token{Value: "a", Token: token.EscapedValue},
-				token.Token{Token: token.Null},
-			},
-		},
-		Err: nil,
-	},
-
-	{
-		Name:   "eight",
-		Source: "x,y\na,\n",
-		Fields: []token.Token{
-			{Value: "x", Token: token.Value},
-			{Value: ",", Token: token.Comma},
-			{Value: "y", Token: token.Value},
-			{Value: "\n", Token: token.Newline},
-			{Value: "a", Token: token.Value},
-			{Value: ",", Token: token.Comma},
-			{Value: "\n", Token: token.Newline},
-		},
-		Records: []parser.Record{
-			{
-				token.Token{Value: "x", Token: token.Value},
-				token.Token{Value: "y", Token: token.Value},
-			},
-			{
-				token.Token{Value: "a", Token: token.Value},
-				token.Token{Token: token.Null},
-			},
-		},
-		Err: nil,
-	},
-
-	{
-		Name:   "eight quoted",
-		Source: "\"x\",\"y\"\n\"a\",\n",
-		Fields: []token.Token{
-			{Value: "x", Token: token.EscapedValue},
-			{Value: ",", Token: token.Comma},
-			{Value: "y", Token: token.EscapedValue},
-			{Value: "\n", Token: token.Newline},
 			{Value: "a", Token: token.EscapedValue},
 			{Value: ",", Token: token.Comma},
 			{Value: "\n", Token: token.Newline},
+			{Value: ",", Token: token.Comma},
+			{Value: ",", Token: token.Comma},
+			{Value: "a", Token: token.EscapedValue},
+			{Value: "\n", Token: token.Newline},
+			{Value: ",", Token: token.Comma},
+			{Value: "a", Token: token.EscapedValue},
+			{Value: ",", Token: token.Comma},
+			{Value: "a", Token: token.EscapedValue},
+			{Value: "\n", Token: token.Newline},
 		},
-		Records: []parser.Record{
-			{
-				token.Token{Value: "x", Token: token.EscapedValue},
-				token.Token{Value: "y", Token: token.EscapedValue},
-			},
-			{
-				token.Token{Value: "a", Token: token.EscapedValue},
-				token.Token{Token: token.Null},
-			},
-		},
-		Err: nil,
-	},
 
-	{
-		Name:   "ninth",
-		Source: "x,\"y\"\na,b\n",
-		Fields: []token.Token{
-			{Value: "x", Token: token.Value},
-			{Value: ",", Token: token.Comma},
-			{Value: "y", Token: token.EscapedValue},
-			{Value: "\n", Token: token.Newline},
-			{Value: "a", Token: token.Value},
-			{Value: ",", Token: token.Comma},
-			{Value: "b", Token: token.Value},
-			{Value: "\n", Token: token.Newline},
-		},
 		Records: []parser.Record{
 			{
-				token.Token{Value: "x", Token: token.Value},
-				token.Token{Value: "y", Token: token.EscapedValue},
+				{Value: "a", Token: token.EscapedValue},
+				{Value: "a", Token: token.EscapedValue},
+				{Value: "a", Token: token.EscapedValue},
 			},
+
 			{
-				token.Token{Value: "a", Token: token.Value},
-				token.Token{Value: "b", Token: token.Value},
+				{Value: "", Token: token.Null},
+				{Value: "", Token: token.Null},
+				{Value: "", Token: token.Null},
+			},
+
+			{
+
+				{Value: "a", Token: token.EscapedValue},
+				{Value: "", Token: token.Null},
+				{Value: "", Token: token.Null},
+			},
+
+			{
+				{Value: "a", Token: token.EscapedValue},
+				{Value: "a", Token: token.EscapedValue},
+				{Value: "", Token: token.Null},
+			},
+
+			{
+				{Value: "", Token: token.Null},
+				{Value: "", Token: token.Null},
+				{Value: "a", Token: token.EscapedValue},
+			},
+
+			{
+				{Value: "", Token: token.Null},
+				{Value: "a", Token: token.EscapedValue},
+				{Value: "a", Token: token.EscapedValue},
 			},
 		},
 		Err: nil,
@@ -378,7 +184,9 @@ var testdata = []struct {
 			{Value: "\n", Token: token.Newline},
 		},
 		Records: []parser.Record{
-			{token.Token{Value: "\n", Token: token.Newline}},
+			{
+				{Value: "\n", Token: token.Newline},
+			},
 		},
 		Err: nil,
 	},
@@ -390,7 +198,9 @@ var testdata = []struct {
 			{Value: "\n", Token: token.Newline},
 		},
 		Records: []parser.Record{
-			{token.Token{Value: "\n", Token: token.Newline}},
+			{
+				{Value: "\n", Token: token.Newline},
+			},
 		},
 		Err: nil,
 	},
@@ -444,6 +254,7 @@ func TestAdvance(t *testing.T) {
 			},
 			Err: nil,
 		},
+
 		{
 			Name:   "space1",
 			Source: " aaa",
@@ -453,6 +264,7 @@ func TestAdvance(t *testing.T) {
 			},
 			Err: nil,
 		},
+
 		{
 			Name:   "space2",
 			Source: "aaa ",
@@ -462,6 +274,7 @@ func TestAdvance(t *testing.T) {
 			},
 			Err: nil,
 		},
+
 		{
 			Name:   "quoted",
 			Source: `"aaa"`,
@@ -471,6 +284,7 @@ func TestAdvance(t *testing.T) {
 			},
 			Err: nil,
 		},
+
 		{
 			Name:   "quoted quote",
 			Source: `""""`,
@@ -480,6 +294,7 @@ func TestAdvance(t *testing.T) {
 			},
 			Err: nil,
 		},
+
 		{
 			Name:   "quoted comma",
 			Source: `","`,
@@ -489,6 +304,7 @@ func TestAdvance(t *testing.T) {
 			},
 			Err: nil,
 		},
+
 		{
 			Name:   "quoted line feed",
 			Source: "\"\n\"",
@@ -498,6 +314,7 @@ func TestAdvance(t *testing.T) {
 			},
 			Err: nil,
 		},
+
 		{
 			Name:   "empty quote",
 			Source: `""`,
@@ -507,6 +324,7 @@ func TestAdvance(t *testing.T) {
 			},
 			Err: nil,
 		},
+
 		{
 			Name:   "blank quote",
 			Source: `" "`,
@@ -523,18 +341,21 @@ func TestAdvance(t *testing.T) {
 			Field:  token.Token{},
 			Err:    tokenizer.EOF,
 		},
+
 		{
 			Name:   "orphan quote1",
 			Source: `"`,
 			Field:  token.Token{},
 			Err:    tokenizer.ErrUnterminatedString,
 		},
+
 		{
 			Name:   "orphan quote2",
 			Source: `"a`,
 			Field:  token.Token{},
 			Err:    tokenizer.ErrUnterminatedString,
 		},
+
 		{
 			Name:   "CR",
 			Source: "\r",
