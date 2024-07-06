@@ -162,6 +162,8 @@ fun main() do
        };
 
    let g Greeter = interface(p) -- interface conversion
+   -- why not use this syntax? Perhaps because this is a cast.
+   let g = Greeter(p)
 
    -- complementary and more advance syntax
    let g Greeter(Person) = interface(p)
