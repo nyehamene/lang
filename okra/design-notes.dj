@@ -357,3 +357,21 @@ let p =
 
 ## let-defer
 
+## Support Ref type
+
+Allow declaration of variables or parameter of type `Ref`.
+The idea is to support mutability through variables of this type.
+
+Inspired by `atom`, `agents` etc. in clojure.
+
+- *Atom*
+- *Var*
+
+```okra
+let name Atom[string] = "John"
+println(name) -- John
+name.set("Doe")
+-- or
+@name = "doe"
+println(name) -- Doe
+```
