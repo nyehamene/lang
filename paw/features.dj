@@ -1,0 +1,61 @@
+# paw
+
+A typed lisp.
+
+## function declaration
+
+```clj
+(fn get-name string []
+	"John")
+```
+
+### Function parameter
+
+In a function declaration only the type of the function's parameters
+are listed. In other words, a function declaration does not name it's
+parameters. Each parameter must be named in the function body using the
+parameter reference form `(param number type)` where number starts from
+`1` and is incremented for each parameter of the same type.
+
+```clj
+(fn add int [int int] ; function declaration with 2 parameters of type int
+	(let [
+	     a (param 1 int) ; create a variable for the first parameter
+		 b (param 2 int) ; create a variable for the second parameter
+		 ]
+		 (+ a b)))
+```
+
+## record declaration
+
+```clj
+(let User
+	(record
+		name string
+	  	email string
+	  	age int))
+```
+
+## enum declaration
+
+```clj
+(let Gender
+	(enum
+		Male
+		Female))
+```
+
+## interface declaration
+
+```clj
+(let IntIterator
+	(interface
+		(has-next bool [])
+		(next int [])))
+```
+
+## type alias
+
+```clj
+(let Email (type string))
+```
