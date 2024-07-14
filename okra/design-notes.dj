@@ -355,6 +355,21 @@ let p =
 
 ## Zig like generics
 
+### type function AKA type function.
+
+The example below combines generic function in _zig_ and
+iterator function in_golang_.
+
+```okra
+fn Iterator(comptime K type, V type) iterator do end
+fn Iterator(comptime V type) iterator do end
+fn Iterator() iterator do end
+```
+
+Where `iterator` is a _builtin_ that represents a function
+with the following signature `fn[K, V](yield fn(K, V) bool)`
+or `fn[V](yield fn()(V, bool))`.
+
 ## let-defer
 
 ## Support Ref type
