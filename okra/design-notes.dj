@@ -390,3 +390,9 @@ name.set("Doe")
 @name = "doe"
 println(name) -- Doe
 ```
+
+## Continuation, Coroutine, and Iterator
+
+- [ ] Can _continuation_ be implemented using `block` (AKA `do...end`).
+- [ ] Can _coroutines__ be implemented using `block`.
+- [ ] Can _iterators_ be implemented using `block`.
