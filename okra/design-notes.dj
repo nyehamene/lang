@@ -396,3 +396,30 @@ println(name) -- Doe
 - [ ] Can _continuation_ be implemented using `block` (AKA `do...end`).
 - [ ] Can _coroutines__ be implemented using `block`.
 - [ ] Can _iterators_ be implemented using `block`.
+
+## Deterministic deallocation of memory
+
+Inspired by `mojo`.
+
+Types of values:
+
+- _BValue_: Borrowed immutable ref (default)
+- _RValue_: Owned mutable ref
+- _LValue_: Mutable ref (temporarily owned)
+- _SValue_: Owned immutable value
+
+```okra
+fn borrowed_arg(v ref(String)) do end
+fn owned_arg(let v ref(String)) do end
+fn mutable_arg(var v ref(String)) do end
+```
+
+## Multiple return (without multiple return)
+
+```okra
+let ok bool = false;
+let value, ok = get_value("key", ok);
+ok.if_false() do ... end
+
+fn get_value(k String, ok ref(Bool)) do ... end
+```
