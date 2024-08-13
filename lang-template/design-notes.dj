@@ -1,0 +1,56 @@
+# Design note
+
+A simple templating language.
+
+## Template table
+
+a declarative syntax for definintion structured text.
+
+```
+[div
+   id="wrapper"
+   display="grid cols-2 gap-1 ai-center ji-left jc-center"
+   display="(width < 750px) cols-1"
+
+   a plain text
+
+   "a quoted text"
+
+   (expression)
+   (expression arg)
+
+   \( literal parenthesis
+   \[ literal bracket
+
+   \(text surrounded in parenthesis)
+   \[text surrounded in square bracket]
+
+   [p
+      a block text
+      [span an inline text ]
+      [em emphasised text ]
+      [strong important text ]
+      ]
+   ]
+
+   [code
+      lang="js"
+
+      function load() {
+         document.addEventListener("DOMContentLoad", () => {})
+         }
+
+      ]
+
+   [:keyword
+      text
+      [element]
+      (expression)
+      ]
+
+   To render as an element, there most be no space between the [ and the tag name
+   [ not an element; just some text in brackets ]
+
+   To render as an expression, there most be no space between the ( and the expression
+   ( not an expression; just some text in parenthesis )
+```
