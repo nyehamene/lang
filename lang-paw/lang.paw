@@ -1,0 +1,24 @@
+(type User
+	(struct
+		firstname String
+		lastname String
+		id Int))
+
+(type Greeter
+	(interface
+		(say_hello [String])
+		(say_hello_world [])))
+
+(fn void main[]
+	(println "Hello World!"))
+
+(fn Int add[Int Int]
+	(let a Int/1)
+	(let a Int/2)
+	(+ a b))
+
+(fn Int sub(Int Int)
+	(let [a Int/1
+		  b Int/2
+		  ]
+		(+ a b)))
