@@ -1,0 +1,431 @@
+# Design ideas
+
+## Go lang
+
+1. Go documentation comment is great
+2. Automatic conversion when calling a method
+   declared with a pointer reciever on a value
+   receiver is not so great!
+3. Implicit implementation of an interface is great.
+4. Accept interfaces return struct is great but with a little twist
+
+   a. The interface accepted must be declared in the same module.
+   b. The struct (i.e record) returned must also be declared in the
+      module.
+
+5. Type assertion and type conversion
+
+   Type conversion happens at compile time, whereas
+   type assertion happens at runtime.
+
+   Idiomatic Go code uses the comma-ok idiom. In pen/penny
+   type assertion may use block functions to handle failure
+   cases when the type assertion is wrong.
+
+   > On a second note, one of my earlier goals was to avoid casting
+   or any form of type assertion.
+   I planed for the language to borrow from smalltalk which has no
+   form of type assertion but instead relies on virtual dispatch.
+   This maybe possible in pen/penny using interfaces.
+   This may also (preferable) with a case interface.
+
+6. In _Go_ functions can implement interfaces. I like the idea
+   but is this different from function or method reference?
+
+   I think that both features archieve the same goals. So choose one
+   among the two.
+
+   ```pen
+
+   type[T] Comparable fn interface
+	 fn compare(T, T) int end
+     end
+
+   fn process(c Comparable) do end
+
+   let compareInt fn(int, int) int = math.min;
+   let compareStr fn(String, String)int = str.min_length;
+
+   -- Implement a functional interface through type conversion
+   let ci Comparable[Int] = fun(compareInt);
+   let cs Comparable[String] = fun(compareStr);
+
+   -- alternatively omitting intermidiate steps
+   let cii Comparable[Int] = fun(math.min)
+   let css Comparable[String] = fun(str.min_length)
+
+   process(ci)
+   process(cs)
+   ```
+
+## Idea for constructors
+
+```pen
+type Range class
+  start int;
+  end   int;
+end 
+
+--- new is a constructor for `Range` class
+fn r Range new() Range do
+   let inValid bool = r.start > r.end;
+   inValid.if_true() do
+     -- what happens here
+     -- * return an error as the last value in multiple value return statement
+     -- ** This will require multiple returns in the language
+     -- * panic
+     -- ** This will require some kind of error mechanism unlike in `go`
+     -- ** And a way to detect that an error has occurred
+     -- ** Both point are outside the scope of `pen`
+     -- * use a block
+     -- ** This will make the use site verbose/awkward
+     -- ** Would also extend the constructor method `new` to include
+     --    block methods.
+     end
+  end
+
+fn main() do
+   let r1 = Range { start = 2; end = 1 } -- error here
+   let r2 = Range { start = 0; end = 1 } -- ok here
+
+   let re1, err = Range { start = 2; end = 1 }
+   let re2 = Range { start = 2; end = 1 } else do end
+   end
+```
+
+## Compile time constructor
+
+```pen
+fn comptime o T new() T do end
+fn comptime o T new() T b block() do end
+```
+
+## Enums (under the hood)
+
+Implement enums by combining the following
+
+1. `union` types
+2. `case-functions`
+3. `embedded record`
+
+* This requires a way to st
+
+## Nullable types
+
+Syntax
+
+```pen
+let name ?String = nil
+
+-- alternative syntax
+
+let name String? = nil
+```
+
+Nullable types should not be allowed in function/method parameters
+and function/method return type.
+
+In other words, nullable types maybe used in variable definition in
+a let statements only.
+
+## Type Conversion
+
+### Type to interface convertion
+
+Support conversion from any type to an interface.
+The conversion must be checked at compile time and
+must result in a compile time error if the operand
+does not conform to the interface.
+
+```pen
+namespace greeter;     -- greeter.pen
+type Greeter interface
+   greet() String;
+   end
+
+namespace person;     -- person.pen
+type Person struct
+   firstName String;
+   lastName String;
+   end
+
+fn p Person greet() String do
+   return "Hello, \{p.firstName}, \{p.lastName}!"
+   end
+
+namepsace main;      -- main.pen
+fn main() do
+   let p =
+       Person{
+       firstName = "John",
+       lastName = "Doe",
+       };
+
+   let g Greeter = interface(p) -- interface conversion
+
+   -- complementary and more advance syntax
+   let g Greeter(Person) = interface(p)
+
+   -- with a type from another namespace
+   let g Greeter(ns.Person) = interface(p)
+
+   println(g.greet())
+   end
+```
+
+1. A method can be defined on any type in any namespace scope
+2. A method can be invoke directly on an object only in the namespace
+   in which the method was defined for the type of the object.
+3. To invoke a method on an object in any namespace separate for the
+   namespace where the method was defined, the object must first be
+   converted via _interface conversion_, to an instance of any interface
+   that defines a method whose signature matches with the signature of
+   the target method.
+
+### Function to interface conversion
+
+Convert a function/method to an interface with a single method
+so called (functional interface).
+
+```pen
+type[a] Comparable interface
+  compare(a, a) int;
+  end
+
+type Person record
+  age Int;
+  end
+
+fn compareByAge(a Person, b Person) int do end
+
+fn p Person ageGreater(p, b Person) int do end
+
+fn main() do
+   let p Person = ...;
+   let c1 Comparable[Person] = fun(p.ageGreater); -- method to interface conversion
+   let c2 Comparable[Person] = fun(compareByAge); -- fn to interface conversion
+   end
+```
+
+### Interface to record conversion
+
+Convert an interface to an instance of a record type. Any method in an
+interface that take no parameters, whose name and return type matches
+the name and type of a record field is treated as an accessor. The accessor
+method for each field is called to produce an instance of the record.
+
+```pen
+type User interface
+   name() String
+   age() Int
+   end
+
+type Person record
+   name String;
+   age Int;
+   end
+
+fn convert(u User) Person do
+   let p Person = record(u); -- interface to record conversion
+   return p;
+   end
+```
+
+## Let-type variable and implicity end
+
+It is illegal to define a type inside a function/method block.
+Instead use a _let-type_ statement.
+A _let-type_ statement is a _let_ statement use for defining a
+local type assigned to a varaible.
+
+```pen
+-- define a local interface
+let User type = 
+    interface
+    fullname() String;
+    end;
+
+-- define a local enum
+let Gender type =
+    enum
+    Male;
+    Female;
+    end;
+
+-- define a local struct
+let Person type =
+    struct
+    name String;
+    gender Gender;
+    end;
+
+-- define a local method
+let p Person type =
+    fn fullname() String do
+    return p.name
+    end;
+
+-- define a local function that does not capture any values from the enclosing scope
+let greet_person type =
+   fun(p Person) do
+   let fullname = p.fullName() -- call a local method
+   return "Hello \{fullname}"
+   end;
+
+-- create a variable whose type is a local type
+let p = Person{
+        name = "John";
+        gender = Gender.Male;
+        };
+
+-- call a local method
+p.fullname()
+
+-- call a local function
+greet_person(p)
+```
+
+The idea it to make the closing `end` keyword for type,
+function and method declaration in the top level block optional.
+The compiler should be able to implicitly insert a the keyword.
+
+While parsing a function, for example, if the parser encounters
+another top level declaration (fun, type, etc) then it inserts
+the keyword `end` and stops processing the current function.
+
+```pen
+fn foo() do
+  let name = "John"
+  name.upperCase()
+
+-- is equivalent to
+fn foo() do
+   let name = "John"
+   name.upperCase()
+   end
+```
+
+### let-type of fun
+
+A function defined with _let-type_ idiom cannot capture values
+from the enclosing scope. Whereas, a function assigned to a variable
+whose type is a function type using the normal variable declaration
+syntax can capture variables from the enclosing scope.
+
+```pen
+let two = 2; -- captured by the following functions
+let addTwo fun(int) int =
+    fun(a int, b int) int do
+       return a + two;
+       end;
+
+let subTwo = 
+    fun(a int, b int) int do
+       return a - two;
+       end;
+```
+
+## Alternate block syntax
+
+Consider using `{` and `}` to define blocks.
+
+```pen
+fn main() {}
+type User interface {}
+type Person record {}
+type Gender enum {}
+if_true() do {}
+```
+
+Then use `[` and `]` for data blocks.
+
+```pen
+let p =
+    Person[
+    firstName = "John",
+    lastName = "Doe",
+    ]
+```
+
+## Implicit semicolon
+
+## Method type signature and Method-function type signature
+
+## Generics
+
+### Zig-like generics
+
+### Go-like generics
+
+## let-defer
+
+## Table
+
+Inspired by lua table.
+
+A type that wants to be used as a table most implement the
+table trait/protocol/interface
+
+- Implementation syntax
+
+  - Syntax
+
+     TBD
+
+   - A type can implements more than one table with a different key type
+
+   ```
+   type Person record ... end
+
+   -- Where Person implements table[String]Int and table[Int]String
+
+   let p = Person[...]
+   -- get table mapping String to Int
+   let st = table[String]Int(person)
+   st["one"] = 1
+   println(st["one"])
+
+   let it = table[Int]String(person)
+   it[0] = "one"
+   println(it[0])
+   ```
+
+- Type declaration syntax
+
+  `type[key]value`
+
+- Builtins
+
+  `table[k]v`
+
+  `table` is a builtin type. the type `type[K]V` is a super type for
+  any type `T` if `T` implements the table mapping a key of type `K`
+  to a value of type 'V'.
+
+  Builtin may not be need
+
+## Loop
+
+```pen
+let itr = person.iterator()
+itr.each() do(p Person)
+   println(p)
+   loop -- instead of end
+
+itr.each do(p Person) -- would be nice to omit ()
+   println(p)
+   loop
+```
+
+## Multiple return
+
+No multiple returns. Take inspiration from Mojo temporary ownership
+to implement multi-return like feature combined with comma-ok idom
+from golang.
+
+```pen
+fn b Bag first_item(ok ref[bool]) String do end
+
+let ok = false;
+let item, ok := bag.first_item(ok)
+```

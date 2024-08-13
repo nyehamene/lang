@@ -1,0 +1,245 @@
+# Okra
+
+## Variable
+
+```okra
+let v Type = value;
+let v = value;
+```
+
+## With-expression
+
+```okra
+let p = Point{ x = 0; y = 1 }
+let pp = p with { .x = 1 }
+```
+
+## Function
+
+```okra
+fn name() do end
+fn name() Type do end
+fn name(p Type) Type do end
+fn name(p Type, p Type) Type do end
+fn name(p Type, p ...Type) Type do end
+```
+
+### Split Function
+
+```okra
+fn name(p Type) other(p Type) do end
+fn name(p Type) other(p Type) Type do end
+fn name(p Type) other(p Type) yet_another(p Type) Type do end
+fn name(p Type, p Type) other(a Type) yet_another(p Type) Type do end
+```
+
+### Block Function
+
+```okra
+fn name() b block() do end
+fn name() b block() Type do end
+fn name() b block(p Type) Type do end
+fn name() b block(p Type, p Type) Type do end
+fn name() b block(p Type, p ...Type) Type do end
+```
+
+#### Slit Block Function
+
+```okra
+fn name(p Type) b block(p Type) other(p Type) Type do end
+fn name(p Type) other(p Type) b block(p Type) Type do end
+fn name(p Type) b block(p Type) other(p Type) b block(p Type) Type do end
+```
+
+## Type
+
+### Function Type
+
+```okra
+let f fn(Type) Type = value;
+```
+
+### Union types
+
+```okra
+type X union
+  Int;
+  String;
+  end
+```
+
+### Type alias
+
+```okra
+type IntOperator fn(Int, Int)Int end
+type Email String end
+```
+
+## Enum
+
+```okra
+type Gender enum
+  Male;
+  Female;
+  end
+```
+
+An enum item may be a value of any type
+
+```okra
+type X enum
+   x X = 10;
+   x = true;
+   end
+```
+
+An enum item's value may be an anonymous record
+
+```okra
+type[T] Planet enum[mass T, radius T]
+  Mercury[Float, Float]{ mass Float = 3.3, radius Float = 2.4 };
+  Venus{ mass = 4.8; radius = 6.5 };
+  Earth{ mass = 5.9; radius = 6.3 };
+  Mars{ mass = 6.2; radius = 3.3 };
+  Jupiter{ mass = 1.9; radius = 7.1 };
+  Saturn{ mass = 5.6; radius = 6.0 };
+  Uranus{ mass = 8.6; radius = 2.5 };
+  Neptune{ mass = 1.0; radius = 2.4 };
+  Pluto{};
+  end
+```
+
+## Record
+
+```okra
+type Name record
+  c T;
+  c T;
+  end
+```
+
+## Interface
+
+```okra
+type Name interface
+  fn name(T, T) T end
+  fn name(T) other(T) T end
+  fn name(T, T) block() T end
+  end
+```
+
+## Case function set
+
+```okra
+type Conditional case
+  fn ifTrue() block() end
+  fn ifFalse() block() end
+  end
+```
+
+A case-function set may also have normal functions
+
+```okra
+type Greeting case
+  fn englishGreeting(String) String end
+  fn spanishGreeting(String) String end
+  end
+```
+
+A type implements a case-function set by implement one
+and only one of the methods in the case-function set.
+
+> A `union` type implements a case-function set if all its
+> subtypes implements the case-function set.
+> Same for an `enum`, if all its item types implements the
+> case-function set.
+
+## Method
+
+```okra
+fn o Type name(t T) T do end
+fn _ Type name(t T) T do end
+```
+
+## Enum item method
+
+```okra
+fn o enum(T.T) name(t T) T do end
+fn o T.T name(t T) T do end
+fn o T:T name(t T) T do end
+fn o T where T T.T name(t T) T do end
+```
+
+## Constructor
+
+```okra
+fn t T new() T do end
+fn t T new() T b block() do end
+```
+
+## Generics
+
+### Generic Function
+
+```okra
+fn[T, T] name(t T, x X) T do end 
+fn[T, T] name(t T, x X) other(p T) T do end 
+fn[T, T] name(t T, x X) b block(T) T do end
+```
+
+### Generic Type
+
+#### Generic Record
+
+```okra
+type[T, T] Name record
+  name T;
+  end
+```
+
+### Generic Enum
+
+```okra
+type[T] Name enum
+   name[Int] = 10;
+   name[Bool] = true;
+   name record[Int]{ item X = value; }
+   end
+```
+
+#### Generic Interface
+
+```okra
+type[T, T] Name interface
+  fn name(T) T end
+  fn name(T) block(T) T end
+  end
+```
+
+#### Generic Case function
+
+```okra
+type[T, T] Name case
+  fn name(T) T end
+  end
+```
+
+#### Generic Method
+
+```okra
+-- (1) method for any instance of type P
+fn[T] p P[T] name(t T) T do end
+
+-- (2) method for only instances of type P[Int]
+fn p P[Int] name(t T) T do end
+```
+
+#### Generic Function Type
+
+Can only be defined inside a generic method
+
+```okra
+fn[T] p P[T] name() do
+  let f f(T) T = value;
+  end
+```
