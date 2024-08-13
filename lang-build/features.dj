@@ -1,0 +1,4 @@
+# Features
+
+- [ ] Make semi colons optional by implicitly inserting it using simple rule
+  just like in golang.
