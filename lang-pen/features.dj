@@ -36,7 +36,6 @@
    among the two.
 
    ```pen
-
    type[T] Comparable fn interface
 	 fn compare(T, T) int end
      end
@@ -46,11 +45,11 @@
    let compareInt fn(int, int) int = math.min;
    let compareStr fn(String, String)int = str.min_length;
 
-   -- Implement a functional interface through type conversion
+   // Implement a functional interface through type conversion
    let ci Comparable[Int] = fun(compareInt);
    let cs Comparable[String] = fun(compareStr);
 
-   -- alternatively omitting intermidiate steps
+   // alternatively omitting intermidiate steps
    let cii Comparable[Int] = fun(math.min)
    let css Comparable[String] = fun(str.min_length)
 
@@ -58,35 +57,37 @@
    process(cs)
    ```
 
+7. There must be an explicit reassignment at any location where a variables value is changed
+
 ## Idea for constructors
 
 ```pen
 type Range class
   start int;
   end   int;
-end 
+end
 
---- new is a constructor for `Range` class
+/// new is a constructor for `Range` class
 fn r Range new() Range do
    let inValid bool = r.start > r.end;
    inValid.if_true() do
-     -- what happens here
-     -- * return an error as the last value in multiple value return statement
-     -- ** This will require multiple returns in the language
-     -- * panic
-     -- ** This will require some kind of error mechanism unlike in `go`
-     -- ** And a way to detect that an error has occurred
-     -- ** Both point are outside the scope of `pen`
-     -- * use a block
-     -- ** This will make the use site verbose/awkward
-     -- ** Would also extend the constructor method `new` to include
-     --    block methods.
+     // what happens here
+     // * return an error as the last value in multiple value return statement
+     // ** This will require multiple returns in the language
+     // * panic
+     // ** This will require some kind of error mechanism unlike in `go`
+     // ** And a way to detect that an error has occurred
+     // ** Both point are outside the scope of `pen`
+     // * use a block
+     // ** This will make the use site verbose/awkward
+     // ** Would also extend the constructor method `new` to include
+     //    block methods.
      end
   end
 
 fn main() do
-   let r1 = Range { start = 2; end = 1 } -- error here
-   let r2 = Range { start = 0; end = 1 } -- ok here
+   let r1 = Range { start = 2; end = 1 } // error here
+   let r2 = Range { start = 0; end = 1 } // ok here
 
    let re1, err = Range { start = 2; end = 1 }
    let re2 = Range { start = 2; end = 1 } else do end
@@ -117,7 +118,7 @@ Syntax
 ```pen
 let name ?String = nil
 
--- alternative syntax
+// alternative syntax
 
 let name String? = nil
 ```
@@ -138,12 +139,12 @@ must result in a compile time error if the operand
 does not conform to the interface.
 
 ```pen
-namespace greeter;     -- greeter.pen
+namespace greeter;     // greeter.pen
 type Greeter interface
    greet() String;
    end
 
-namespace person;     -- person.pen
+namespace person;     // person.pen
 type Person struct
    firstName String;
    lastName String;
@@ -153,7 +154,7 @@ fn p Person greet() String do
    return "Hello, \{p.firstName}, \{p.lastName}!"
    end
 
-namepsace main;      -- main.pen
+namepsace main;      // main.pen
 fn main() do
    let p =
        Person{
@@ -161,12 +162,12 @@ fn main() do
        lastName = "Doe",
        };
 
-   let g Greeter = interface(p) -- interface conversion
+   let g Greeter = interface(p) // interface conversion
 
-   -- complementary and more advance syntax
+   // complementary and more advance syntax
    let g Greeter(Person) = interface(p)
 
-   -- with a type from another namespace
+   // with a type from another namespace
    let g Greeter(ns.Person) = interface(p)
 
    println(g.greet())
@@ -202,8 +203,8 @@ fn p Person ageGreater(p, b Person) int do end
 
 fn main() do
    let p Person = ...;
-   let c1 Comparable[Person] = fun(p.ageGreater); -- method to interface conversion
-   let c2 Comparable[Person] = fun(compareByAge); -- fn to interface conversion
+   let c1 Comparable[Person] = fun(p.ageGreater); // method to interface conversion
+   let c2 Comparable[Person] = fun(compareByAge); // fn to interface conversion
    end
 ```
 
@@ -226,7 +227,7 @@ type Person record
    end
 
 fn convert(u User) Person do
-   let p Person = record(u); -- interface to record conversion
+   let p Person = record(u); // interface to record conversion
    return p;
    end
 ```
@@ -239,49 +240,49 @@ A _let-type_ statement is a _let_ statement use for defining a
 local type assigned to a varaible.
 
 ```pen
--- define a local interface
-let User type = 
+// define a local interface
+let User type =
     interface
     fullname() String;
     end;
 
--- define a local enum
+// define a local enum
 let Gender type =
     enum
     Male;
     Female;
     end;
 
--- define a local struct
+// define a local struct
 let Person type =
     struct
     name String;
     gender Gender;
     end;
 
--- define a local method
+// define a local method
 let p Person type =
     fn fullname() String do
     return p.name
     end;
 
--- define a local function that does not capture any values from the enclosing scope
+// define a local function that does not capture any values from the enclosing scope
 let greet_person type =
    fun(p Person) do
-   let fullname = p.fullName() -- call a local method
+   let fullname = p.fullName() // call a local method
    return "Hello \{fullname}"
    end;
 
--- create a variable whose type is a local type
+// create a variable whose type is a local type
 let p = Person{
         name = "John";
         gender = Gender.Male;
         };
 
--- call a local method
+// call a local method
 p.fullname()
 
--- call a local function
+// call a local function
 greet_person(p)
 ```
 
@@ -298,7 +299,7 @@ fn foo() do
   let name = "John"
   name.upperCase()
 
--- is equivalent to
+// is equivalent to
 fn foo() do
    let name = "John"
    name.upperCase()
@@ -313,7 +314,7 @@ whose type is a function type using the normal variable declaration
 syntax can capture variables from the enclosing scope.
 
 ```pen
-let two = 2; -- captured by the following functions
+let two = 2; // captured by the following functions
 let addTwo fun(int) int =
     fun(a int, b int) int do
        return a + two;
@@ -377,10 +378,10 @@ table trait/protocol/interface
    ```
    type Person record ... end
 
-   -- Where Person implements table[String]Int and table[Int]String
+   // Where Person implements table[String]Int and table[Int]String
 
    let p = Person[...]
-   -- get table mapping String to Int
+   // get table mapping String to Int
    let st = table[String]Int(person)
    st["one"] = 1
    println(st["one"])
@@ -410,9 +411,9 @@ table trait/protocol/interface
 let itr = person.iterator()
 itr.each() do(p Person)
    println(p)
-   loop -- instead of end
+   loop // instead of end
 
-itr.each do(p Person) -- would be nice to omit ()
+itr.each do(p Person) // would be nice to omit ()
    println(p)
    loop
 ```
@@ -428,4 +429,129 @@ fn b Bag first_item(ok ref[bool]) String do end
 
 let ok = false;
 let item, ok := bag.first_item(ok)
+```
+
+## record, struct and implicit methods
+
+A both a `record` and a `struct` are used to create user defined types.
+However a record supports implicit methods but a struct does not.
+
+Implicit methods allows a record to seamlessly implement an interface.
+Removing boilerplate method definitions whose method body only returns
+the value of a field in the record.
+
+```pen
+type Task interface {
+    id() string
+    date() string
+    name() string
+}
+
+type TaskRecord record {
+   id string
+   date string
+   name string
+}
+
+type TaskStruct struct {
+   id string
+   date string
+   name string
+}
+```
+TaskRecord implicitly defines the following records:
+
+```pen
+id() string
+date() string
+name() string
+```
+
+Allow a value of type `TaskRecord` to be assigned to a variable
+of type `Task` in the following snippet:
+
+```pen
+let rtask =
+    TaskRecord{
+        id = "100",
+        date = "25/08/2024",
+        name = "task_1",
+        }
+
+let mytask Task = rtask // valid
+
+mytask.id()
+```
+
+An implicit method cannot be called directly on an instance of a record.
+The following snippet results in a compile time error.
+
+```pen
+rtask.id() // error id() is not accessible on a value of type TaskRecord
+```
+
+## With expression
+
+All variables and function argument are immutable.
+
+```pen
+let p = Person{
+   id = 100,
+   name = "John",
+   age = 89,
+   }
+
+let pp = p with
+   .id = 200;
+   .age = 50;
+   end
+```
+
+## Ownership, and borrowing
+
+Deterministic memory management (dloc) should be opt-in at compile time.
+The default memory management strategy (in the JVM) must permit
+automatic memory management (aloc) and garbage collection.
+
+- Borrowed argument
+- Inout argument
+- Owned argument
+
+```pen
+// Borrowed argument
+
+fn add_two(n Int) do
+   // n += 2; // error because n is immutable. Will not be valid if assignment statement is not supported
+   let n = n + 2;
+   println(n)
+   end
+
+let x = 1;
+add_two(x);
+println(x);
+
+// output:
+// 2
+// 1
+```
+
+```pen
+// Inout argument
+fn add_two(n Int): void, n do
+   n += 2;
+   println(n);
+   end
+
+let x = 1;
+let y = 1;
+x = add_two(x);  // explicitly reassign
+_ = add_two(y);  // explicitly ignore
+// x = add_two(y); // error because the inout argument y and the variable x are not the same variable
+// add_two(x); // error because x must be explicitly reassigned or ignored
+// let x = add_two(x); // option 2: if assignment statement is not supported
+println(x);
+
+// output:
+// 2
+// 2
 ```
