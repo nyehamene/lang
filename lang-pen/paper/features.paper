@@ -1,0 +1,199 @@
+// my_platform is a platform declaration
+my_platform : platform = platform "github:platform/reporsitory";
+
+/// the type (or kind) can be inferred if omitted
+my_platform := platform "github:username/platform-repo";
+
+// my_module is a module declaration.
+my_module : module = module "github:module/repository";
+
+/// the type (or kind) can be inferred if omitted
+my_module := module "github:module/reporsitory";
+
+/// a module declaration may be contain a list of dependencies in
+/// an annonymous record initialization literal
+my_module := module "github:module/reporsitory" {
+    dependencies := [
+        { name :string = "module/name-1" };
+        { name := "module/name-1" };
+        { "module/name-2" };
+        ]
+    };
+
+/// a module can be gotten from a platform using member-access expression
+my_module : module = my_platform.program_module;
+
+/// the module type can be inferred if omitted
+my_module := my_platform.program_module;
+
+/// a module declaration may be contain a list of dependencies in
+/// a block block method invokation
+my_module : module = my_platform.program_module do(config)
+    config.dependencies = [
+        { name :string = "module/name-1" };
+        { name := "module/name-2" };
+        { "module/name-3" };
+        ]
+    end;
+
+/// Note: A module is a group of related packages.
+/// A module can also be used to control the behavior of packages.
+/// This can be used to define packages that behave like scripts in a scripting language
+/// or like programs requiring a function (typically called main) as an entry point to the program
+///
+/// Module patterns
+/// 1) Single package module
+///    Here, the module has only one package
+///    The module declaration is declared in the main namespace of the package
+///    The package can be a main package (see main package below)
+///
+/// 2) Multi package module
+///    Here, the module is declared in a paper.mod file
+///    The module can contain multiple packages
+///
+/// How to declare a script package? And,
+/// How to declare a program package?
+
+// my_package is a package declaration
+my_package : package = package "package_name";
+
+/// the type (or kind) can be inferred if omitted
+my_package := package "package_name";
+
+/// Note: a package is used to group related namespaces
+/// A package named main must contain a namespace named main
+/// The main namespace must contain a function named main whose argument depend on the platform
+/// No cycle is allow in package dependencies
+/// A namespace do not implicitly have access to declarations in other namespaces in the same package
+/// Use the package identifier to access declarations in other namespaces in the same package, e.g.
+/// my_package.my_namespace.my_declaration;
+/// Declarations in the main package can be accessed directly on the package identifier (object)
+/// my_package.my_declaration;
+
+// my_import is a import declaration
+my_import : package = import "module:package";
+
+/// the type can be inferred if omitted
+my_import := import "module:package";
+
+// my_const is a constant declaration.
+my_const :string = const "i am a constant";
+
+/// the type can be inferred if omitted
+my_const := const "i am a constant string";
+
+// my_let is an immutable variable declaration
+my_let :string = let "i am an immutable string variable";
+
+/// the type can be inferred if omitted
+my_let := let "i am an immutable string";
+
+// my_var is a mutable variable declaration
+my_var :string = var "i am a mutable string variable";
+
+/// the type can be inferred if omitted
+my_var := var "i am a mutable string variable";
+
+/// let is implied if neither const, let, nor var is present
+my_let := "i am an immutable string variable";
+
+// MyRecord is a record declaration
+MyRecord :record = record {
+    my_component: string;
+    };
+
+/// the type can be inferred if omitted
+MyRecord := record {
+    my_component: string;
+    };
+
+// my_overload is an explicit function overload declaration
+my_overload :fn = overload fn1; fn2; end;
+
+/// the type can be inferred if omitted
+my_overload := overload fn1; fn2; end;
+
+// my_test is a test for a function with the same name
+my_test :test = test t: TestHandler "test description" fn() end;
+
+/// the type can be inferred if omitted
+my_test := test t: TestHandler "test description" fn() end;
+
+// my_method is a method declaration
+my_method :impl := impl a: MyRecord fn(arg: Type) do
+    /// 'a' is a reference to the object the method is invoked on
+    /// use 'a' otherwise an error occurs
+    end;
+
+/// the type can be inferred if omitted
+my_method := impl a: MyRecord fn(arg: Type) do
+    /// 'a' is a reference to the object the method is invoked on
+    /// use 'a' otherwise an error occurs
+    end;
+
+// my_func is a function declaration
+my_func :fn() = fn() end;
+
+/// the type can be inferred if omitted
+my_func := fn() end;
+
+/// declaration of function parameters
+my_func := fn(a: String; b: Int) end;
+
+/// declaration of function body
+my_func := fn(a: String) do
+    // use 'a'
+    end;
+
+/// declaration a function return type
+my_func := fn() -> string end;
+
+/// declaration of split function
+my_func split :=
+    fn(a: int)
+    fn(b: int)
+    do
+    /// use 'a' and 'b'
+    /// call a split function
+    my_func(100) split(200);
+    end;
+
+/// declaration of a block function
+add_or_call :=
+    fn(a: int; b: int)
+    block my_block()
+    do
+    /// use 'a' and 'b'
+
+    is_zero = a == 0;
+
+    if_true(is_zero) do
+        goto my_block();
+        end;
+    return a + b;
+    end;
+
+/// declaration of a block function parameters
+get_or_call_with_errmsg :=
+    fn()
+    block my_block(a: string) do
+    goto my_block("my default value");
+    end;
+
+/// declaration of a split block function
+if_present else := impl(o: Optional)
+    fn() block other() do
+    if_true(o.is_empty()) do
+        goto other();
+        end;
+    return o.get_value();
+    end;
+
+/// delaration a function that returns multiple values
+my_func := fn() -> int; string end;
+
+// declaration of a type alias
+MyType :record = alias AnotherType;
+
+/// the type can be inferred is omitted
+MyType := alias AnotherType;
