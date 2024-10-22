@@ -1,0 +1,2 @@
+[core]
+markdown.file_extension = ["md", "markdown", "djot", "dj"]
