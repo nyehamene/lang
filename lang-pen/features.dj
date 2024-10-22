@@ -63,9 +63,9 @@
 
 ```pen
 type Range class
-  start int;
-  end   int;
-end
+  from int;
+  to   int;
+  end
 
 /// new is a constructor for `Range` class
 fn r Range new() Range do
@@ -555,3 +555,49 @@ println(x);
 // 2
 // 2
 ```
+
+## Module again
+
+Support a folder-based package system just like in go lang.
+But one I design goal is to avoid (or minimize) implicit things as much as possible.
+
+In golang a package is a directory of files containing go code. Any definition in one
+of the files can be seen in another file in the same package.
+
+One important benefit of this avoiding the diamond-import problem (learned this from the creator of odin)
+which is greet.
+
+I would also like to avoid the diamond-import problem in the package system for pen. But I also want every
+use of any symbol (definitions) to be easily traceable to the source file containing its definition.
+
+The feature below may provide a viable alternative that avoids the diamon-import prolem while alos enabling
+easy tracebility (is this a word).
+
+### Package system
+
+1. A package in _pen_ is a folder/directory of namespaces.
+2. A _namespace_ is a source file containing symbol definitons (e.g. record, functions, e.t.c.).
+3. All the namespace in package must have a package declaration naming the package;
+4. And the package name must be the same for each namepsace in the same folder.
+5. The name of a namespace is derived from the file name.
+
+```
+// github.nyehamene.lib
+user/
+- core.pen
+- db.pen
+- sqlite.pen
+```
+
+The listing above shows a folder hierarchy defining a package (possibily called `user`)
+in the module `github.nyehamene.lib` containing 3 namespaces: `core`, `db`, `sqlite`.
+
+### Avoiding diamond-import
+
+The keyword 'pkg' is implicitly available inside each namespace in a package. And it
+provides access to all the symbol defined in that package. For example, a symbol in
+the `user` namespace can access another symbol `conn` in the `db` namespace using `pkg.db.conn`.
+
+Any package may have a namespace called `core`. The _core_ namespace has special treatment in
+that the symbol defined in it can be accessed directly on the `pkg` (e.g. `pkg.User` instead of `pkg.user.User`)
+keyword with the namespace qualification.
