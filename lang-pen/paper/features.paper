@@ -107,6 +107,13 @@ MyRecord := record {
     my_component: string;
     };
 
+/// TODO: change overload statement syntax to use {} or [] to list functions to overload
+/// Why, because it would be helpful to have a consistent way to define code blocks (do ... end)
+/// the current syntax uses 'end' without a corresponding 'do' to start the block.
+/// Second, can the body of an overload statement be considered a code block.
+/// it may be better to treat it like a list of functions to overload, therefore [] seams more
+/// appropriate.
+
 // my_overload is an explicit function overload declaration
 my_overload :fn = overload fn1; fn2; end;
 
@@ -114,22 +121,32 @@ my_overload :fn = overload fn1; fn2; end;
 my_overload := overload fn1; fn2; end;
 
 // my_test is a test for a function with the same name
-my_test :test = test t: TestHandler "test description" fn() end;
+my_test :test = test t: TestHandler
+    "test description"
+    fn(string) -> string do
+        t.assert(false);
+        end;
 
 /// the type can be inferred if omitted
-my_test := test t: TestHandler "test description" fn() end;
+my_test := test t: TestHandler
+    "test description"
+    fn(string) -> string do
+        t.assert(false);
+        end;
 
 // my_method is a method declaration
-my_method :impl := impl a: MyRecord fn(arg: Type) do
-    /// 'a' is a reference to the object the method is invoked on
-    /// use 'a' otherwise an error occurs
-    end;
+my_method :impl := impl a: MyRecord
+    fn(arg: Type) do
+        /// 'a' is a reference to the object the method is invoked on
+        /// use 'a' otherwise an error occurs
+        end;
 
 /// the type can be inferred if omitted
-my_method := impl a: MyRecord fn(arg: Type) do
-    /// 'a' is a reference to the object the method is invoked on
-    /// use 'a' otherwise an error occurs
-    end;
+my_method := impl a: MyRecord
+    fn(arg: Type) do
+        /// 'a' is a reference to the object the method is invoked on
+        /// use 'a' otherwise an error occurs
+        end;
 
 // my_func is a function declaration
 my_func :fn() = fn() end;
