@@ -1,0 +1,64 @@
+# Syntax
+# #  Starts a line comment
+# := separates rule name and body
+# {} repeatition
+# [] optonal
+# |  alternative
+# () group
+# .  end of rule body
+# "" a string literal
+# '' a string literal
+# // a regular expression
+# $  prefix external rule name
+# inline rules that have capitalized names
+
+
+source := { decl } .
+decl := typed_ident "=" stmt .
+
+# TODO: add expr, comment, and documentation productions
+stmt := kwd_stmt ";" .
+
+# TODO: add the following alternative productions
+# - variable (let, var)
+# - constant (const)
+# - overload
+# - union
+# - enum
+# - record
+# - interface
+# - alias
+# - test
+kwd_stmt :=
+    decl_platform
+    | decl_package
+    | decl_import
+    | decl_fun
+    .
+
+decl_platform := "platform" lit_str .
+decl_package := "package" lit_str .
+decl_import := "import" lit_str .
+
+decl_fun := "fn" fn_args fn_body .
+fn_args := "(" [ typed_ident { ";" typed_ident } ] ")" .
+fn_body := [ "->" ident ] [ "do" ] "end" .
+
+typed_ident := ident ":" [ type ] .
+
+# TODO: add the following alternative productions
+# - type_fun for function type
+# - type_record for inline (anonymous) record type
+# - type_interface for inline (anonymous) interface type
+# - type_union for inline (anonymous) union type
+# - type_enum for inline (anonymous) enum type
+type := ident .
+
+ident := _ | ( Alpha | "_" ) { Alpha_numeric | "_" } .
+
+lit_str := '"' /[^"\n]/ '"' .
+
+Alpha_numeric := Alpha | Numeric .
+Alpha := /[a-zA-Z]/ .
+Numeric := Digit { Digit } .
+Digit := /[0-9]/ .
