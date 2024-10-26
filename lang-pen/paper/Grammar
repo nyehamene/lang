@@ -42,7 +42,7 @@ decl_import := "import" lit_str .
 
 decl_fun := "fn" fn_args fn_body .
 fn_args := "(" [ typed_ident { ";" typed_ident } ] ")" .
-fn_body := [ "->" ident ] [ "do" ] "end" .
+fn_body := [ "->" type ] [ "do" ] "end" .
 
 typed_ident := ident ":" [ type ] .
 
